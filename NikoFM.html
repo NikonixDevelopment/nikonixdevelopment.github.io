@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NikoFM</title>
+    <script src="js/song.js" defer=""></script>
+    <link rel="shortcut icon" href="images/pfp.png" type="image/x-icon" id="fi">
+
+    <!-- Add updated stylish CSS -->
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Roboto+Mono:100,200,300,400,500,600,700,800,900&display=swap');
+
+        /* General reset and font */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto Mono', monospace;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('https://raw.githubusercontent.com/NikonixDevelopment/FF0329/refs/heads/main/dhmpxsi-39a63cee-4f40-46e3-a191-ad9849f9bbd2.png'); /* Set background image */
+            background-size: cover; /* Ensure the background image covers the whole screen */
+            background-position: center; /* Position the background image in the center */
+            color: #EEE;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(26, 26, 26, 0.95); /* 95% opacity for the player */
+            padding: 20px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 425px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+            opacity: 0.95; /* Set opacity to 95% */
+        }
+
+        .mimg {
+            position: relative;
+            margin-bottom: 20px;
+            width: 150px;
+            height: 150px;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .mimg img {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .mimg img:hover {
+            transform: scale(1.05);
+        }
+
+        /* Buttons hidden by default */
+        .mimg button {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: transparent;
+            border: none;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            visibility: hidden; /* Hide buttons by default */
+        }
+
+        .mimg:hover button {
+            visibility: visible; /* Show buttons when hovering over the image */
+        }
+
+        .mimg button img {
+            width: 50%;
+            height: 50%;
+            object-fit: contain;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .mimg button:hover img {
+            opacity: 0.8;
+        }
+
+        .next {
+            color: #EEE;
+            margin-top: 20px;
+        }
+
+        .next p {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .next #res-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .next #res-artist {
+            font-size: 16px;
+            font-weight: 300;
+            color: #888;
+        }
+
+        .controls {
+            margin-top: 30px;
+            width: 90%;
+            max-width: 250px;
+        }
+
+        #volume {
+            width: 100%;
+            height: 8px;
+            border-radius: 99px;
+            background-color: #444;
+            outline: none;
+            appearance: none;
+            transition: .3s;
+        }
+
+        #volume:hover {
+            background-color: #4A8E8B;
+        }
+
+        #volume::-webkit-slider-thumb {
+            width: 20px;
+            height: 20px;
+            background: #FFF;
+            cursor: pointer;
+            border: none;
+            border-radius: 50%;
+        }
+
+        #volume::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: #FFF;
+            cursor: pointer;
+            border: none;
+            border-radius: 50%;
+        }
+
+        footer {
+            position: absolute;
+            bottom: 10px;
+            color: #bbb;
+            font-size: 14px;
+        }
+
+        footer a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: #4A8E8B;
+        }
+
+        .hidden {
+            visibility: hidden;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Audio Player for NikoFM -->
+    <audio id="audio" src="http://radiohost.nikofm.com:8000/nikofm.mp3"></audio>
+
+    <main>
+        <div class="mimg">
+            <!-- Updated logo -->
+            <img src="https://raw.githubusercontent.com/NikonixDevelopment/FF0329/refs/heads/main/Screenshot%202025-01-30%20150320.png" id="res-img">
+            <button onclick="togglemusic()">
+                <!-- Play Button -->
+                <img id="tp-play" class="tp-play" src="https://raw.githubusercontent.com/NikonixDevelopment/FF0329/refs/heads/main/play-button-arrowhead.png" alt="Play">
+                <!-- Pause Button -->
+                <img id="tp-pause" class="tp-pause hidden" src="https://raw.githubusercontent.com/NikonixDevelopment/FF0329/refs/heads/main/pause.png" alt="Pause">
+            </button>
+        </div>
+        
+        <div class="next">
+            <p id="res-title">NikoFM</p>
+            <p id="res-artist">NON STOP HITS | ZERO ADS | ALWAYS FREE</p>
+        </div>
+    </main>
+
+    <div class="controls">
+        <input type="range" min="0" max="1" value="0.15" step="0.001" oninput="audio.volume = this.value" id="volume">
+    </div>
+
+    <script>
+        audio = document.getElementById('audio');
+        audio.volume = 0.15;
+
+        let playbtn = document.getElementById('tp-play');
+        let pausebtn = document.getElementById('tp-pause');
+
+        function togglemusic() {
+            if (audio.paused) {
+                audio.play();
+                playbtn.classList.add('hidden');
+                pausebtn.classList.remove('hidden');
+            } else {
+                audio.pause();
+                pausebtn.classList.add('hidden');
+                playbtn.classList.remove('hidden');
+            }
+        }
+    </script>
+
+    <footer>
+        <p>Copyright © <a href="https://edh.sh">NikoFM</a></p>
+    </footer>
+
+</body>
+</html>
+
+
