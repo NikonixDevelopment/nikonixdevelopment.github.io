@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="icon" href="favicon.png" type="image/png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nikonix Development</title>
@@ -39,7 +40,33 @@
             margin-top: 20px;
         }
       
-      
+      .fancy-button {
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+    background: linear-gradient(45deg, #ff6b6b, #ff3b3f);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.fancy-button:hover {
+    background: linear-gradient(45deg, #ff3b3f, #ff6b6b);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+}
+
+.fancy-button:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(45deg, #ff3b3f, #ff6b6b);
+}
+
     </style>
 </head>
 <body>
@@ -48,8 +75,17 @@
      <img src="https://raw.githubusercontent.com/NikonixDevelopment/nikonixdevelopment.github.io/refs/heads/main/assets/636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png" width="10%" height="10%" alt="Description of the image">
  <h5>
 @niko_tmp</h5>
+ <a href ="http://radiohost.nikofm.com"> 
+ <button class="fancy-button">NikoFM Radio</button>
+   </a>
+<a href="assets/NikCrypter.html">
+<button class="fancy-button">NikCrypter</button>
+</a>
+  
+ 
+
+
   
 </body>
 </html>
-
 
