@@ -11,56 +11,27 @@
             margin: 50px;
             background-image: url('https://raw.githubusercontent.com/NikonixDevelopment/FF0329/refs/heads/main/dhmpxsi-39a63cee-4f40-46e3-a191-ad9849f9bbd2.png');
             background-size: cover;
-            color: white;
-        }
-        h2, h3 {
-            font-size: 2.5em;
-            color: #FFD700;
-            margin-bottom: 20px;
+            color: black; /* Set text color to black */
         }
         textarea {
             width: 80%;
             height: 100px;
-            font-size: 1.2em;
-            padding: 10px;
-            margin: 10px;
-            border: 2px solid #fff;
-            border-radius: 5px;
-            background: rgba(255, 255, 255, 0.3);
-            color: white;
+            font-size: 16px;
+            color: black; /* Set text color to black */
         }
         button {
             margin: 10px;
-            padding: 15px 25px;
-            font-size: 1.2em;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
+            padding: 10px;
+            font-size: 16px;
+            color: black; /* Set text color to black */
         }
-        button:hover {
-            background-color: #45a049;
+        h2, h3 {
+            color: black; /* Set text color to black for headings */
         }
         #tip {
-            color: #FFD700;
-            font-size: 1.1em;
+            color: black; /* Set text color to black for the tip */
+            font-size: 16px;
             margin-top: 20px;
-        }
-        input[type="file"] {
-            margin-top: 20px;
-            padding: 10px;
-            font-size: 1.1em;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        input[type="file"]:hover {
-            background-color: #45a049;
         }
     </style>
 </head>
@@ -108,63 +79,84 @@
             '2': ['%$£^', 'nv8z', 'wpq2', 'bvxw', '0lmz', 'krnq', 'hf1s', 'y6vo', 'aqf8', 'j2dc'],
             '3': ['&*()?', 'u73n', 'lq85', 'djb2', '4pmc', 'wt69', 'kfgz', 'nxq8', 'h0ct', 'zojw'],
             '4': ['{@?!', 'fh2r', '7tms', 'kvo1', 'pxw9', 'gn8s', 'l1j2', 'u0yr', 'qw4p', '8bvc'],
-            '5': ['!}{&', 'gqr7', '8nb2', 'lx9v', 'ytx5', 'w4p0', 'z9tm', 'j7c6', 'npw1', 'd5mk'],
-            '6': ['~@@!', 'lp5s', '2owm', 't39b', 'xcwq', 'u8q7', 'a4h5', 'z6v9', '1p0r', 'xk3v'],
-            '7': ['^£%$', 'g6k2', 'wb3p', 'm2o1', 'vbt6', 'hz9q', 'yck4', 'sj1m', 'r0g7', 'x9f0'],
-            '8': ['{?*&', 'j4pg', 'v6ht', 'g5mr', 'yw9b', 'l81c', '3xnb', 'z5tm', 'f2ja', 'rk7p'],
-            '9': ['%*@^', 'mj7v', '1fg8', 'w2xj', 'c6sz', 'xl0g', 'b91r', 'dvt0', 'qos4', 'klx9'],
-            '0': ['!@$?', 'g0kn', 'yq6d', 'k9c7', 'b4rn', 'm9f0', '2j6w', 'xl2q', 'fh4y', 'p0rt'],
+            '5': ['!}{&', 'gqr7', '8nb2', 'lx9v', 'ytx5', 'nweq', 'cr0z', 'fbg4', 'pz6j', 'tkim'],
+            '6': ['~@@!', 'zdp5', 'm3q9', 'gbo7', 'w5st', 'ak9d', 'n4jm', 'yht2', '1pfg', 'u7xq'],
+            '7': ['^£%$', 'srd3', 'c7q4', 'pw2o', '1xv6', 'fy5n', 'bm0z', 'au9l', 'h2pk', 't9jw'],
+            '8': ['{?*&', 'k2tm', 'wq9z', 'cl3g', '6jop', 'yn4x', '9sfl', 'tzvw', '0m8y', 'vcpq'],
+            '9': ['%*@^', 'rd1v', 'xy2p', 'fnt3', '8mhs', 'akq5', 'bpwj', 'g3xc', 's0lz', '0vrq'],
+            '0': ['!@$?', 'w9pf', '1c5o', 'v7gk', 'sxl3', 'jt0d', '9a2m', 'y0tq', 'k4zj', 'nbv1']
         };
-
+        
+        const decryptionMap = Object.fromEntries(
+            Object.entries(encryptionMap).flatMap(([char, codes]) => codes.map(code => [code, char]))
+        );
+        
         function encryptText() {
-            const inputText = document.getElementById('inputText').value.toUpperCase();
-            let output = '';
-            for (let i = 0; i < inputText.length; i++) {
-                const char = inputText[i];
+            let input = document.getElementById("inputText").value.toUpperCase();
+            let encryptedText = "\\ ";
+            
+            for (let char of input) {
                 if (encryptionMap[char]) {
-                    output += encryptionMap[char][Math.floor(Math.random() * encryptionMap[char].length)] + '_\\_';
+                    let key = encryptionMap[char][Math.floor(Math.random() * encryptionMap[char].length)];
+                    encryptedText += key + " ";
+                } else if (char === ' ') {
+                    encryptedText += "_\\_ ";
                 } else {
-                    output += char;
+                    encryptedText += char + " ";
                 }
             }
-            document.getElementById('outputText').value = output.slice(0, -4);
+            
+            encryptedText += "\\";
+            document.getElementById("outputText").value = encryptedText;
         }
-
+        
         function decryptText() {
-            const inputText = document.getElementById('inputText').value;
-            let output = '';
-            const regex = /([a-zA-Z0-9]{3,})/g;
-            const matches = inputText.split('_\\_');
-            matches.forEach(part => {
-                for (const [key, value] of Object.entries(encryptionMap)) {
-                    if (value.includes(part)) {
-                        output += key;
-                        break;
-                    }
+            let input = document.getElementById("inputText").value.trim();
+            if (input.startsWith("\\") && input.endsWith("\\")) {
+                input = input.slice(2, -2).trim();
+            }
+            
+            let words = input.split(" ");
+            let decryptedText = "";
+            
+            for (let word of words) {
+                if (decryptionMap[word]) {
+                    decryptedText += decryptionMap[word];
+                } else if (word === "_\\_") {
+                    decryptedText += " ";
+                } else {
+                    decryptedText += word;
                 }
-            });
-            document.getElementById('outputText').value = output;
+            }
+            
+            document.getElementById("outputText").value = decryptedText;
         }
 
         function downloadText() {
-            const text = document.getElementById('outputText').value;
-            const blob = new Blob([text], { type: 'text/plain' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = 'encrypted_text.nik';
-            link.click();
+            let text = document.getElementById("outputText").value;
+            let blob = new Blob([text], { type: "text/plain" });
+            let a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "encrypted.nik";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
         }
-
+        
         function uploadText() {
-            const fileInput = document.getElementById('fileInput');
-            const file = fileInput.files[0];
-            const reader = new FileReader();
-            reader.onload = function (event) {
-                document.getElementById('inputText').value = event.target.result;
-                decryptText();
+            let fileInput = document.getElementById("fileInput");
+            let file = fileInput.files[0];
+            if (!file) return;
+            
+            let reader = new FileReader();
+            reader.onload = function(event) {
+                document.getElementById("inputText").value = event.target.result;
             };
             reader.readAsText(file);
         }
     </script>
 </body>
 </html>
+
+
+
