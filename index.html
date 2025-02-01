@@ -1,72 +1,171 @@
-<!DOCTYPE html><html lang="en"><head>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>/edh</title>
-
-    <script src="js/song.js" defer=""></script>
-
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="shortcut icon" href="images/pfp.png" type="image/x-icon" id="fi">
+    <title>NikCrypter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+            background-image: url('https://raw.githubusercontent.com/NikonixDevelopment/FF0329/refs/heads/main/dhmpxsi-39a63cee-4f40-46e3-a191-ad9849f9bbd2.png');
+            background-size: cover;
+            color: white;
+        }
+        h2, h3 {
+            font-size: 2.5em;
+            color: #FFD700;
+            margin-bottom: 20px;
+        }
+        textarea {
+            width: 80%;
+            height: 100px;
+            font-size: 1.2em;
+            padding: 10px;
+            margin: 10px;
+            border: 2px solid #fff;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+        button {
+            margin: 10px;
+            padding: 15px 25px;
+            font-size: 1.2em;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #tip {
+            color: #FFD700;
+            font-size: 1.1em;
+            margin-top: 20px;
+        }
+        input[type="file"] {
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 1.1em;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        input[type="file"]:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
-
-    <!-- YES, THIS CODE IS UGLY. I DO NOT CARE. -->
-    <!-- YES, THIS CODE IS UGLY. I DO NOT CARE. -->
-    <!-- YES, THIS CODE IS UGLY. I DO NOT CARE. -->
-    <!-- YES, THIS CODE IS UGLY. I DO NOT CARE. -->
-
-    <audio id="audio" src="http://radiohost.nikofm.com:8000/nikofm.ogg"></audio>
-
-    <main>
-        <div class="mimg">
-            <img src="images/tml.png" id="res-img">
-
-            <button onclick="togglemusic()">
-                <svg id="tp-play" class="tp-play" width="72" height="72" viewBox="0 0 95 95" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title>Group 27</title><defs><rect id="path-1" x="0" y="0" width="63" height="63" rx="31.5"></rect><filter x="-38.9%" y="-37.3%" width="177.8%" height="177.8%" filterUnits="objectBoundingBox" id="filter-2"><feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset><feGaussianBlur stdDeviation="8" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur><feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"></feComposite><feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.412368881 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix></filter></defs><g id="Latest" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="Desktop-HD-Copy-4" transform="translate(-1218.000000, -399.000000)"><g id="Radio" transform="translate(990.000000, 71.000000)"><g id="Group-3" transform="translate(-18.000000, 14.000000)"><g id="Group-19" transform="translate(106.000000, 222.000000)"><g id="Group-27" transform="translate(156.000000, 107.000000)"><g id="Combined-Shape"><use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use><rect stroke-opacity="0.711975524" stroke="#FFFFFF" stroke-width="1" stroke-linejoin="square" fill-opacity="0.4" fill="#000000" fill-rule="evenodd" x="0.5" y="0.5" width="62" height="62" rx="31"></rect></g><path d="M38.368174,29.7081009 L28.9393398,23.2052399 C28.173247,22.6771364 27,23.1896156 27,24.4958125 L27,37.4984096 C27,38.6702371 28.090209,39.3764584 28.9393398,38.7889822 L38.368174,32.2892461 C39.2092688,31.7111446 39.2119475,30.2862025 38.368174,29.7081009 Z" id="Path" fill="#FFFFFF"></path></g></g></g></g></g></g></svg>
-                <svg id="tp-pause" class="tp-pause hidden" width="72" height="72" viewBox="0 0 95 95" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title>Group 27</title><defs><rect id="path-1" x="0" y="0" width="63" height="63" rx="31.5"></rect><filter x="-38.9%" y="-37.3%" width="177.8%" height="177.8%" filterUnits="objectBoundingBox" id="filter-2"><feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset><feGaussianBlur stdDeviation="8" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur><feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"></feComposite><feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.412368881 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix></filter></defs><g id="Latest" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="Desktop-HD-Copy-4" transform="translate(-1138.000000, -399.000000)"><g id="Radio" transform="translate(990.000000, 71.000000)"><g id="Group-3" transform="translate(-18.000000, 14.000000)"><g id="Group-19" transform="translate(106.000000, 222.000000)"><g id="Group-27" transform="translate(76.000000, 107.000000)"><g id="Combined-Shape"><use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use><rect stroke-opacity="0.711975524" stroke="#FFFFFF" stroke-width="1" stroke-linejoin="square" fill-opacity="0.4" fill="#000000" fill-rule="evenodd" x="0.5" y="0.5" width="62" height="62" rx="31"></rect></g><g id="Group-5" transform="translate(26.000000, 23.000000)" fill="#FFFFFF"><path d="M4,0 L1,0 C0.45,0 0,0.4 0,0.888888889 L0,15.1111111 C0,15.6 0.45,16 1,16 L4,16 C4.55,16 5,15.6 5,15.1111111 L5,0.888888889 C5,0.4 4.55,0 4,0" id="Fill-1"></path><path d="M11,0 L8,0 C7.45,0 7,0.4 7,0.888888889 L7,15.1111111 C7,15.6 7.45,16 8,16 L11,16 C11.55,16 12,15.6 12,15.1111111 L12,0.888888889 C12,0.4 11.55,0 11,0" id="Fill-3"></path></g></g></g></g></g></g></g></svg>
-            </button>
-            
-        </div>
-        
-        <div class="next">
-            <p id="res-title">edh.sh</p>
-            <p id="res-artist">Thuisradio</p>
-        </div>
-    </main>
-
-    <div class="controls">
-        <input type="range" min="0" max="1" value="0.15" step="0.001" oninput="audio.volume = this.value" id="volume">
-    </div>
-
+    <h2>NikCrypter</h2>
+    <textarea id="inputText" placeholder="Enter text to encrypt/decrypt..."></textarea><br>
+    <button onclick="encryptText()">Encrypt</button>
+    <button onclick="decryptText()">Decrypt</button>
+    <button onclick="downloadText()">Download .nik</button>
+    <input type="file" id="fileInput" accept=".nik" onchange="uploadText()">
+    <h3>Output:</h3>
+    <textarea id="outputText" readonly></textarea>
+    
+    <p id="tip">TIP: ANYONE WHO USES THIS WEBSITE CAN ENCRYPT AND DECRYPT DATA</p>
 
     <script>
-        audio = document.getElementById('audio');
-        audio.volume = 0.15
+        const encryptionMap = {
+            'A': ['pzc', 'qwe', 'rtx', 'abc', 'zxy', 'qaz', 'xsw', 'yui', 'dvb', 'dmt'],
+            'B': ['7sn', '8kd', 'jst', 'mwb', 'loi', 'dgn', 'ras', 'pmk', 'bvl', 'lmn'],
+            'C': ['sy8', 'tf9', 'ipz', 'mkl', 'cvb', 'vtn', 'xza', 'bfr', 'jol', 'xyk'],
+            'D': ['2c7', '3f8', 'zmn', 'wqk', 'xsj', 'ywp', 'rdi', 'lco', 'bvx', 'jzv'],
+            'E': ['td7', 'yu5', 'hgf', 'woz', 'tse', 'rqs', 'dpw', 'bji', 'kvu', 'csa'],
+            'F': ['doi', 's9q', 'gyr', 'wxo', 'dbf', 'kvp', 'zmr', 'lht', 'jvn', 'aws'],
+            'G': ['7ni', 'jpl', 'vmb', 'cgr', 'zjo', 'rtg', 'svk', 'uwq', 'lm9', 'pif'],
+            'H': ['bqu', 'hnr', 'pmi', 'tjx', 'ldn', 'aow', 'zqf', 'ysu', 'gak', 'vbl'],
+            'I': ['9vj', 'cwx', 'moj', 'xpl', 'zdi', 'qrj', 'fgn', 'lkm', 'dvo', 'rms'],
+            'J': ['0c7', 'eol', 'cvz', 'qgf', 'tnp', 'rbl', 'vua', 'sdg', 'khw', 'bft'],
+            'K': ['xzy', 'a7v', 'jfk', 'bm8', 'gca', 'lqw', 'pn9', 'swj', 'jrm', 'zid'],
+            'L': ['am5', 'kg8', 'vbn', 'pjl', 'dcm', 'uov', 'rqs', 'msf', 'wpx', 'yhn'],
+            'M': ['m2m', 'd1n', 'cxa', 'bpr', 'rt6', 'pjt', 'kwo', 'ivh', 'l9n', 'bzi'],
+            'N': ['jkm', 'sza', 'lwb', 'g9x', 'rmd', 'fpt', 'tvo', 'iyj', 'dcb', 'w4o'],
+            'O': ['d0a', 'fpt', 'lm7', 'cvu', 'rmi', 'bpq', 'vfg', 'xwi', 'lth', 'hsn'],
+            'P': ['rbh', '6qv', 'zdm', 'itw', 'o9f', 'vxi', 'gla', 'jym', 'cpx', 'wnt'],
+            'Q': ['cuj', 'zty', 'v9p', 'lqk', 'gzm', 'fwd', 'khy', 'sbg', 'oax', 'nvu'],
+            'R': ['7cl', 'p5j', 'hdy', 'zoi', 'mjf', 'lrs', 'xdt', 'bqg', 'uol', 'wpk'],
+            'S': ['pfk', 'd4n', 'jst', 'vmr', 'bpc', 'olq', 'yzv', 'xai', 'gsh', 'wck'],
+            'T': ['qnw', 'yoz', 'j7m', 'gsn', 'zix', 'vyt', 'rco', 'bpj', 'l5x', 'nqi'],
+            'U': ['jhj', 'rnt', 'zdo', 'bpc', 'yts', 'lks', 'fgv', 'ivm', 'w5x', 'nq2'],
+            'V': ['vl5', 'bxm', 's2y', 'ytn', 'mcj', 'ujg', 'q5p', 'htk', 'woq', 'rdi'],
+            'W': ['b14', 'jz9', 'kxl', 'wtp', 'msi', 'aov', 'dpz', 'rjx', 'yfg', 'ntc'],
+            'X': ['rpu', 'vkn', 'p8y', 'laz', 'jfh', 'mdn', 'o7g', 'sx1', 'zxc', 'buw'],
+            'Y': ['yu9', 'tr7', 'qdb', 'kve', 'mnj', 'zic', 'oh3', 'xgt', 'slv', 'p2o'],
+            'Z': ['n9r', 'bzt', 'mpq', 'y9k', 'r0p', 'jml', 'x2c', 'o4w', 'tvn', 'gkq'],
+            '1': ['^^&%', '^5hb', '3pwo', 'xgmv', 'adqj', 'znbm', 'fsc9', 'h2xr', 'tm0j', 'qsd3'],
+            '2': ['%$£^', 'nv8z', 'wpq2', 'bvxw', '0lmz', 'krnq', 'hf1s', 'y6vo', 'aqf8', 'j2dc'],
+            '3': ['&*()?', 'u73n', 'lq85', 'djb2', '4pmc', 'wt69', 'kfgz', 'nxq8', 'h0ct', 'zojw'],
+            '4': ['{@?!', 'fh2r', '7tms', 'kvo1', 'pxw9', 'gn8s', 'l1j2', 'u0yr', 'qw4p', '8bvc'],
+            '5': ['!}{&', 'gqr7', '8nb2', 'lx9v', 'ytx5', 'w4p0', 'z9tm', 'j7c6', 'npw1', 'd5mk'],
+            '6': ['~@@!', 'lp5s', '2owm', 't39b', 'xcwq', 'u8q7', 'a4h5', 'z6v9', '1p0r', 'xk3v'],
+            '7': ['^£%$', 'g6k2', 'wb3p', 'm2o1', 'vbt6', 'hz9q', 'yck4', 'sj1m', 'r0g7', 'x9f0'],
+            '8': ['{?*&', 'j4pg', 'v6ht', 'g5mr', 'yw9b', 'l81c', '3xnb', 'z5tm', 'f2ja', 'rk7p'],
+            '9': ['%*@^', 'mj7v', '1fg8', 'w2xj', 'c6sz', 'xl0g', 'b91r', 'dvt0', 'qos4', 'klx9'],
+            '0': ['!@$?', 'g0kn', 'yq6d', 'k9c7', 'b4rn', 'm9f0', '2j6w', 'xl2q', 'fh4y', 'p0rt'],
+        };
 
-        let playbtn = document.getElementById('tp-play');
-        let pausebtn = document.getElementById('tp-pause');
-
-        function togglemusic() {
-            if (audio.paused) {
-                audio.play();
-
-                playbtn.classList.add('hidden');
-                pausebtn.classList.remove('hidden');
-            } else {
-                audio.pause();
-
-                pausebtn.classList.add('hidden');
-                playbtn.classList.remove('hidden');
+        function encryptText() {
+            const inputText = document.getElementById('inputText').value.toUpperCase();
+            let output = '';
+            for (let i = 0; i < inputText.length; i++) {
+                const char = inputText[i];
+                if (encryptionMap[char]) {
+                    output += encryptionMap[char][Math.floor(Math.random() * encryptionMap[char].length)] + '_\\_';
+                } else {
+                    output += char;
+                }
             }
+            document.getElementById('outputText').value = output.slice(0, -4);
+        }
+
+        function decryptText() {
+            const inputText = document.getElementById('inputText').value;
+            let output = '';
+            const regex = /([a-zA-Z0-9]{3,})/g;
+            const matches = inputText.split('_\\_');
+            matches.forEach(part => {
+                for (const [key, value] of Object.entries(encryptionMap)) {
+                    if (value.includes(part)) {
+                        output += key;
+                        break;
+                    }
+                }
+            });
+            document.getElementById('outputText').value = output;
+        }
+
+        function downloadText() {
+            const text = document.getElementById('outputText').value;
+            const blob = new Blob([text], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'encrypted_text.nik';
+            link.click();
+        }
+
+        function uploadText() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                document.getElementById('inputText').value = event.target.result;
+                decryptText();
+            };
+            reader.readAsText(file);
         }
     </script>
+</body>
+</html>
 
-    <footer>
-        <!-- <p>Copyright © <a href="https://edh.sh">edh.sh</a> | Powered by <a href="https://tomorrowland.com/radio">TML OWR</a></p> -->
-        <p>Copyright © <a href="https://edh.sh">edh.sh</a><!-- | Powered by <a href="https://thuisradio.edh.sh">edh.sh Thuisradio</a>--></p>
-    </footer>
-    
-
-</body></html>
