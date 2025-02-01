@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NikCrypter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+            background-image: url('https://raw.githubusercontent.com/NikonixDevelopment/FF0329/refs/heads/main/dhmpxsi-39a63cee-4f40-46e3-a191-ad9849f9bbd2.png');
+            background-size: cover;
+            color: black; /* Set text color to black */
+        }
+        textarea {
+            width: 80%;
+            height: 100px;
+            font-size: 16px;
+            color: black; /* Set text color to black */
+        }
+        button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+            color: black; /* Set text color to black */
+        }
+        h2, h3 {
+            color: black; /* Set text color to black for headings */
+        }
+        #tip {
+            color: black; /* Set text color to black for the tip */
+            font-size: 16px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h2>NikCrypter</h2>
+    <textarea id="inputText" placeholder="Enter text to encrypt/decrypt..."></textarea><br>
+    <button onclick="encryptText()">Encrypt</button>
+    <button onclick="decryptText()">Decrypt</button>
+    <button onclick="downloadText()">Download .nik</button>
+    <input type="file" id="fileInput" accept=".nik" onchange="uploadText()">
+    <h3>Output:</h3>
+    <textarea id="outputText" readonly></textarea>
+    
+    <p id="tip">TIP: ANYONE WHO USES THIS WEBSITE CAN ENCRYPT AND DECRYPT DATA</p>
+
+    <script>
+        const encryptionMap = {
+            'A': ['pzc', 'qwe', 'rtx', 'abc', 'zxy', 'qaz', 'xsw', 'yui', 'dvb', 'dmt'],
+            'B': ['7sn', '8kd', 'jst', 'mwb', 'loi', 'dgn', 'ras', 'pmk', 'bvl', 'lmn'],
+            'C': ['sy8', 'tf9', 'ipz', 'mkl', 'cvb', 'vtn', 'xza', 'bfr', 'jol', 'xyk'],
+            'D': ['2c7', '3f8', 'zmn', 'wqk', 'xsj', 'ywp', 'rdi', 'lco', 'bvx', 'jzv'],
+            'E': ['td7', 'yu5', 'hgf', 'woz', 'tse', 'rqs', 'dpw', 'bji', 'kvu', 'csa'],
+            'F': ['doi', 's9q', 'gyr', 'wxo', 'dbf', 'kvp', 'zmr', 'lht', 'jvn', 'aws'],
+            'G': ['7ni', 'jpl', 'vmb', 'cgr', 'zjo', 'rtg', 'svk', 'uwq', 'lm9', 'pif'],
+            'H': ['bqu', 'hnr', 'pmi', 'tjx', 'ldn', 'aow', 'zqf', 'ysu', 'gak', 'vbl'],
+            'I': ['9vj', 'cwx', 'moj', 'xpl', 'zdi', 'qrj', 'fgn', 'lkm', 'dvo', 'rms'],
+            'J': ['0c7', 'eol', 'cvz', 'qgf', 'tnp', 'rbl', 'vua', 'sdg', 'khw', 'bft'],
+            'K': ['xzy', 'a7v', 'jfk', 'bm8', 'gca', 'lqw', 'pn9', 'swj', 'jrm', 'zid'],
+            'L': ['am5', 'kg8', 'vbn', 'pjl', 'dcm', 'uov', 'rqs', 'msf', 'wpx', 'yhn'],
+            'M': ['m2m', 'd1n', 'cxa', 'bpr', 'rt6', 'pjt', 'kwo', 'ivh', 'l9n', 'bzi'],
+            'N': ['jkm', 'sza', 'lwb', 'g9x', 'rmd', 'fpt', 'tvo', 'iyj', 'dcb', 'w4o'],
+            'O': ['d0a', 'fpt', 'lm7', 'cvu', 'rmi', 'bpq', 'vfg', 'xwi', 'lth', 'hsn'],
+            'P': ['rbh', '6qv', 'zdm', 'itw', 'o9f', 'vxi', 'gla', 'jym', 'cpx', 'wnt'],
+            'Q': ['cuj', 'zty', 'v9p', 'lqk', 'gzm', 'fwd', 'khy', 'sbg', 'oax', 'nvu'],
+            'R': ['7cl', 'p5j', 'hdy', 'zoi', 'mjf', 'lrs', 'xdt', 'bqg', 'uol', 'wpk'],
+            'S': ['pfk', 'd4n', 'jst', 'vmr', 'bpc', 'olq', 'yzv', 'xai', 'gsh', 'wck'],
+            'T': ['qnw', 'yoz', 'j7m', 'gsn', 'zix', 'vyt', 'rco', 'bpj', 'l5x', 'nqi'],
+            'U': ['jhj', 'rnt', 'zdo', 'bpc', 'yts', 'lks', 'fgv', 'ivm', 'w5x', 'nq2'],
+            'V': ['vl5', 'bxm', 's2y', 'ytn', 'mcj', 'ujg', 'q5p', 'htk', 'woq', 'rdi'],
+            'W': ['b14', 'jz9', 'kxl', 'wtp', 'msi', 'aov', 'dpz', 'rjx', 'yfg', 'ntc'],
+            'X': ['rpu', 'vkn', 'p8y', 'laz', 'jfh', 'mdn', 'o7g', 'sx1', 'zxc', 'buw'],
+            'Y': ['yu9', 'tr7', 'qdb', 'kve', 'mnj', 'zic', 'oh3', 'xgt', 'slv', 'p2o'],
+            'Z': ['n9r', 'bzt', 'mpq', 'y9k', 'r0p', 'jml', 'x2c', 'o4w', 'tvn', 'gkq'],
+            '1': ['^^&%', '^5hb', '3pwo', 'xgmv', 'adqj', 'znbm', 'fsc9', 'h2xr', 'tm0j', 'qsd3'],
+            '2': ['%$£^', 'nv8z', 'wpq2', 'bvxw', '0lmz', 'krnq', 'hf1s', 'y6vo', 'aqf8', 'j2dc'],
+            '3': ['&*()?', 'u73n', 'lq85', 'djb2', '4pmc', 'wt69', 'kfgz', 'nxq8', 'h0ct', 'zojw'],
+            '4': ['{@?!', 'fh2r', '7tms', 'kvo1', 'pxw9', 'gn8s', 'l1j2', 'u0yr', 'qw4p', '8bvc'],
+            '5': ['!}{&', 'gqr7', '8nb2', 'lx9v', 'ytx5', 'nweq', 'cr0z', 'fbg4', 'pz6j', 'tkim'],
+            '6': ['~@@!', 'zdp5', 'm3q9', 'gbo7', 'w5st', 'ak9d', 'n4jm', 'yht2', '1pfg', 'u7xq'],
+            '7': ['^£%$', 'srd3', 'c7q4', 'pw2o', '1xv6', 'fy5n', 'bm0z', 'au9l', 'h2pk', 't9jw'],
+            '8': ['{?*&', 'k2tm', 'wq9z', 'cl3g', '6jop', 'yn4x', '9sfl', 'tzvw', '0m8y', 'vcpq'],
+            '9': ['%*@^', 'rd1v', 'xy2p', 'fnt3', '8mhs', 'akq5', 'bpwj', 'g3xc', 's0lz', '0vrq'],
+            '0': ['!@$?', 'w9pf', '1c5o', 'v7gk', 'sxl3', 'jt0d', '9a2m', 'y0tq', 'k4zj', 'nbv1']
+        };
+        
+        const decryptionMap = Object.fromEntries(
+            Object.entries(encryptionMap).flatMap(([char, codes]) => codes.map(code => [code, char]))
+        );
+        
+        function encryptText() {
+            let input = document.getElementById("inputText").value.toUpperCase();
+            let encryptedText = "\\ ";
+            
+            for (let char of input) {
+                if (encryptionMap[char]) {
+                    let key = encryptionMap[char][Math.floor(Math.random() * encryptionMap[char].length)];
+                    encryptedText += key + " ";
+                } else if (char === ' ') {
+                    encryptedText += "_\\_ ";
+                } else {
+                    encryptedText += char + " ";
+                }
+            }
+            
+            encryptedText += "\\";
+            document.getElementById("outputText").value = encryptedText;
+        }
+        
+        function decryptText() {
+            let input = document.getElementById("inputText").value.trim();
+            if (input.startsWith("\\") && input.endsWith("\\")) {
+                input = input.slice(2, -2).trim();
+            }
+            
+            let words = input.split(" ");
+            let decryptedText = "";
+            
+            for (let word of words) {
+                if (decryptionMap[word]) {
+                    decryptedText += decryptionMap[word];
+                } else if (word === "_\\_") {
+                    decryptedText += " ";
+                } else {
+                    decryptedText += word;
+                }
+            }
+            
+            document.getElementById("outputText").value = decryptedText;
+        }
+
+        function downloadText() {
+            let text = document.getElementById("outputText").value;
+            let blob = new Blob([text], { type: "text/plain" });
+            let a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "encrypted.nik";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+        
+        function uploadText() {
+            let fileInput = document.getElementById("fileInput");
+            let file = fileInput.files[0];
+            if (!file) return;
+            
+            let reader = new FileReader();
+            reader.onload = function(event) {
+                document.getElementById("inputText").value = event.target.result;
+            };
+            reader.readAsText(file);
+        }
+    </script>
+</body>
+</html>
+
+
+
