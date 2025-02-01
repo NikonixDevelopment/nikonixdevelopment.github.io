@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Random Number Generator</title>
+    <style>
+        body {
+            background-image: url('https://raw.githubusercontent.com/NikonixDevelopment/FF0329/refs/heads/main/dhmpxsi-39a63cee-4f40-46e3-a191-ad9849f9bbd2.png');
+            background-size: cover;
+            font-family: Arial, sans-serif;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 1.2em;
+            margin-right: 10px;
+        }
+
+        input[type="number"] {
+            font-size: 1.2em;
+            padding: 8px;
+            margin: 10px;
+            border: 2px solid #fff;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+
+        button {
+            font-size: 1.2em;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 1.5em;
+            color: #FFD700;
+        }
+    </style>
+</head>
+<body>
+    <h2>Random Number Generator</h2>
+    <label for="numCount">Number of Numbers:</label>
+    <input type="number" id="numCount" min="1" max="999">
+    <br><br>
+    <label for="rangeStart">Range Start:</label>
+    <input type="number" id="rangeStart" min="1" max="999">
+    <br><br>
+    <label for="rangeEnd">Range End:</label>
+    <input type="number" id="rangeEnd" min="1" max="999">
+    <br><br>
+    <button onclick="generateNumbers()">Generate</button>
+    <br><br>
+    <p id="result"></p>
+
+    <script>
+        function generateNumbers() {
+            let numCount = document.getElementById("numCount").value;
+            let rangeStart = document.getElementById("rangeStart").value;
+            let rangeEnd = document.getElementById("rangeEnd").value;
+            
+            numCount = parseInt(numCount);
+            rangeStart = parseInt(rangeStart);
+            rangeEnd = parseInt(rangeEnd);
+            
+            if (rangeEnd < rangeStart) {
+                document.getElementById("result").innerHTML = "Invalid range!";
+                return;
+            }
+            
+            let uniqueNumbers = new Set();
+            while (uniqueNumbers.size < numCount) {
+                let randomNumber = Math.floor(Math.random() * (rangeEnd - rangeStart + 1)) + rangeStart;
+                uniqueNumbers.add(randomNumber);
+            }
+
+            document.getElementById("result").innerHTML = Array.from(uniqueNumbers).join(', ');
+        }
+    </script>
+</body>
+</html>
