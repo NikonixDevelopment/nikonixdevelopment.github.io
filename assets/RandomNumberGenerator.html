@@ -72,10 +72,11 @@
     <label for="rangeEnd">Range End:</label>
     <input type="number" id="rangeEnd" min="1" max="999">
     <br><br>
+    
+    <p id="timeTaken"></p>
     <button onclick="generateNumbers()">Generate</button>
     <br><br>
     <p id="result"></p>
-    <p id="timeTaken"></p>
 
     <script>
         function generateNumbers() {
@@ -96,10 +97,11 @@
                 uniqueNumbers.add(randomNumber);
             }
             let endTime = performance.now();
-            let timeElapsed = (endTime - startTime).toFixed(2);
+            let timeElapsed = (endTime - startTime) / 1000; // Convert to seconds
+            let displayTime = timeElapsed < 0.01 ? "< 0.01 seconds" : timeElapsed.toFixed(2) + " seconds";
 
             document.getElementById("result").innerHTML = Array.from(uniqueNumbers).join(', ');
-            document.getElementById("timeTaken").innerHTML = `Time taken: ${timeElapsed} seconds`;
+            document.getElementById("timeTaken").innerHTML = `Time taken: ${displayTime}`;
             document.getElementById("timeTaken").style.display = "block";
         }
     </script>
