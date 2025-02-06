@@ -59,12 +59,28 @@
             color: black;
             display: none;
         }
+
+        #warning {
+            font-size: 1.2em;
+            color: red;
+            margin-top: 20px;
+            display: none;
+        }
+
+        #confirmationButtons {
+            display: none;
+            margin-top: 20px;
+        }
+
+        #confirmationButtons button {
+            margin: 0 10px;
+        }
     </style>
 </head>
 <body>
     <h2>Random Number Generator</h2>
     <label for="numCount">Number of Numbers:</label>
-    <input type="number" id="numCount" min="1" max="999">
+    <input type="number" id="numCount" min="1" max="10000">
     <br><br>
     <label for="rangeStart">Range Start:</label>
     <input type="number" id="rangeStart" min="1" max="999">
@@ -74,11 +90,29 @@
     <br><br>
     
     <p id="timeTaken"></p>
-    <button onclick="generateNumbers()">Generate</button>
+    <p id="warning"></p>
+    <div id="confirmationButtons">
+        <button id="proceedBtn" onclick="generateNumbers()">Proceed Generation</button>
+        <button id="cancelBtn" onclick="cancelGeneration()">Cancel</button>
+    </div>
+    <button onclick="checkNumberCount()">Generate</button>
     <br><br>
     <p id="result"></p>
 
     <script>
+        function checkNumberCount() {
+            let numCount = parseInt(document.getElementById("numCount").value);
+
+            // Check if the number of numbers exceeds 10,000
+            if (numCount > 10000) {
+                document.getElementById("warning").style.display = "block";
+                document.getElementById("warning").innerHTML = "Warning: Generating more than 10,000 numbers may cause browser performance issues or crashes. Proceed with caution.";
+                document.getElementById("confirmationButtons").style.display = "block";
+            } else {
+                generateNumbers();  // Proceed with generation if less than or equal to 10,000
+            }
+        }
+
         function generateNumbers() {
             let numCount = parseInt(document.getElementById("numCount").value);
             let rangeStart = parseInt(document.getElementById("rangeStart").value);
@@ -103,6 +137,14 @@
             document.getElementById("result").innerHTML = Array.from(uniqueNumbers).join(', ');
             document.getElementById("timeTaken").innerHTML = `Time taken: ${displayTime}`;
             document.getElementById("timeTaken").style.display = "block";
+
+            // Hide the confirmation buttons once the generation is complete
+            document.getElementById("confirmationButtons").style.display = "none";
+        }
+
+        function cancelGeneration() {
+            document.getElementById("warning").style.display = "none";
+            document.getElementById("confirmationButtons").style.display = "none";
         }
     </script>
 </body>
