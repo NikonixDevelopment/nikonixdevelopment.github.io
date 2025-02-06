@@ -7,7 +7,7 @@
             background-image: url('https://raw.githubusercontent.com/NikonixDevelopment/FF0329/refs/heads/main/dhmpxsi-39a63cee-4f40-46e3-a191-ad9849f9bbd2.png');
             background-size: cover;
             font-family: Arial, sans-serif;
-            color: black; /* Changed from white to black */
+            color: black;
             text-align: center;
             padding: 20px;
         }
@@ -26,17 +26,17 @@
             font-size: 1.2em;
             padding: 8px;
             margin: 10px;
-            border: 2px solid #000; /* Changed from white to black */
+            border: 2px solid #000;
             border-radius: 5px;
-            background: rgba(0, 0, 0, 0.3); /* Adjusted background for better contrast */
-            color: black; /* Changed from white to black */
+            background: rgba(0, 0, 0, 0.3);
+            color: black;
         }
 
         button {
             font-size: 1.2em;
             padding: 10px 20px;
             background-color: #4CAF50;
-            color: black; /* Changed from white to black */
+            color: black;
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -50,7 +50,14 @@
         #result {
             margin-top: 20px;
             font-size: 1.5em;
-            color: black; /* Changed from #FFD700 to black */
+            color: black;
+        }
+
+        #timeTaken {
+            font-size: 1.2em;
+            margin-top: 10px;
+            color: black;
+            display: none;
         }
     </style>
 </head>
@@ -68,29 +75,32 @@
     <button onclick="generateNumbers()">Generate</button>
     <br><br>
     <p id="result"></p>
+    <p id="timeTaken"></p>
 
     <script>
         function generateNumbers() {
-            let numCount = document.getElementById("numCount").value;
-            let rangeStart = document.getElementById("rangeStart").value;
-            let rangeEnd = document.getElementById("rangeEnd").value;
-            
-            numCount = parseInt(numCount);
-            rangeStart = parseInt(rangeStart);
-            rangeEnd = parseInt(rangeEnd);
-            
+            let numCount = parseInt(document.getElementById("numCount").value);
+            let rangeStart = parseInt(document.getElementById("rangeStart").value);
+            let rangeEnd = parseInt(document.getElementById("rangeEnd").value);
+
             if (rangeEnd < rangeStart) {
                 document.getElementById("result").innerHTML = "Invalid range!";
+                document.getElementById("timeTaken").style.display = "none";
                 return;
             }
-            
+
+            let startTime = performance.now();
             let uniqueNumbers = new Set();
             while (uniqueNumbers.size < numCount) {
                 let randomNumber = Math.floor(Math.random() * (rangeEnd - rangeStart + 1)) + rangeStart;
                 uniqueNumbers.add(randomNumber);
             }
+            let endTime = performance.now();
+            let timeElapsed = (endTime - startTime).toFixed(2);
 
             document.getElementById("result").innerHTML = Array.from(uniqueNumbers).join(', ');
+            document.getElementById("timeTaken").innerHTML = `Time taken: ${timeElapsed} seconds`;
+            document.getElementById("timeTaken").style.display = "block";
         }
     </script>
 </body>
