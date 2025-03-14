@@ -1,41 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ETS2 Job Generator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f4f4f4, #e0e7ff);
+      margin: 0;
+      padding: 40px 20px;
       text-align: center;
-      padding: 50px;
     }
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      margin: 10px;
-      cursor: pointer;
+
+    h1 {
+      font-size: 36px;
+      font-weight: 600;
+      margin-bottom: 30px;
+      color: #2c3e50;
+      text-shadow: 1px 1px 2px #ccc;
     }
-    #departure, #destination {
-      font-size: 20px;
-      margin-top: 20px;
-    }
+
     .dlc-group {
+      background-color: #ffffff;
+      padding: 25px;
+      margin: 0 auto 30px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
       text-align: left;
-      display: inline-block;
-      margin-bottom: 20px;
     }
+
+    .dlc-group strong {
+      display: block;
+      font-size: 20px;
+      margin-bottom: 15px;
+      color: #34495e;
+    }
+
     .dlc-group label {
       display: block;
-      margin: 5px 0;
+      margin: 8px 0;
+      font-size: 16px;
+      color: #444;
+      cursor: pointer;
+    }
+
+    .dlc-group input[type="checkbox"] {
+      margin-right: 10px;
+      transform: scale(1.2);
+    }
+
+    button {
+      padding: 12px 28px;
+      font-size: 16px;
+      border: none;
+      border-radius: 12px;
+      background-color: #6366f1;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 6px 14px rgba(99, 102, 241, 0.3);
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #4f46e5;
+      transform: scale(1.05);
+    }
+
+    #departure, #destination {
+      font-size: 22px;
+      margin-top: 25px;
+      color: #2c3e50;
+      font-weight: 500;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 28px;
+      }
+
+      .dlc-group {
+        padding: 20px;
+      }
+
+      button {
+        width: 100%;
+        font-size: 18px;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>ETS2 JOB GENERATOR</h1>
+
+  <h1>🚚 ETS2 Job Generator</h1>
 
   <div class="dlc-group">
-    <strong>Select DLC Areas:</strong><br>
+    <strong>Select DLC Areas:</strong>
     <label><input type="checkbox" value="base" class="dlc-checkbox"> Base Game</label>
     <label><input type="checkbox" value="west" class="dlc-checkbox"> West Balkans DLC</label>
     <label><input type="checkbox" value="road" class="dlc-checkbox"> Road to Black Sea DLC</label>
@@ -48,7 +111,7 @@
     <label><input type="checkbox" value="iberia" class="dlc-checkbox"> Iberia DLC</label>
   </div>
 
-  <button onclick="selectCities()">Select Cities</button>
+  <button onclick="selectCities()">🎯 Select Cities</button>
   <div id="departure"></div>
   <div id="destination"></div>
 
@@ -66,6 +129,7 @@
       italia: ["Ancona, Italy", "Bari, Italy", "Bologna, Italy", "Cagliari, Italy", "Cassino, Italy", "Catania, Italy", "Catanzaro, Italy", "Firenze, Italy", "Genova, Italy", "Livorno, Italy", "Messina, Italy", "Milano, Italy", "Napoli, Italy", "Olbia, Italy", "Palermo, Italy", "Parma, Italy", "Pescara, Italy", "Roma, Italy", "Sassari, Italy", "Taranto, Italy", "Terni, Italy", "Torino, Italy", "Trieste, Italy", "Venezia, Italy", "Verona, Italy", "Villa San Giovanni, Italy", "Suzzara, Italy"],
       iberia: ["Beja, Portugal", "Coimbra, Portugal", "Cortiçadas de Lavre, Portugal", "Faro, Portugal", "Guarda, Portugal", "Lisboa, Portugal", "Olhão, Portugal", "Ponte de Sor, Portugal", "Porto, Portugal", "Setúbal, Portugal", "Sines, Portugal", "Évora, Portugal", "A Coruña, Spain", "Albacete, Spain", "Algeciras, Spain", "Almaraz, Spain", "Almería, Spain", "Badajoz, Spain", "Bailén, Spain", "Barcelona, Spain", "Bilbao, Spain", "Burgos, Spain", "Ciudad Real, Spain", "Córdoba, Spain", "El Ejido, Spain", "Gijón, Spain", "Granada, Spain", "Huelva, Spain", "León, Spain", "Lleida, Spain", "Madrid, Spain", "Mengíbar, Spain", "Murcia, Spain", "Málaga, Spain", "Navia, Spain", "O Barco, Spain", "Pamplona, Spain", "Port de Sagunt, Spain", "Puertollano, Spain", "Salamanca, Spain", "Santander, Spain", "Sevilla, Spain", "Soria, Spain", "Tarragona, Spain", "Teruel, Spain", "Valladolid, Spain", "València, Spain", "Vandellòs, Spain", "Vigo, Spain", "Vila-real, Spain", "Zaragoza, Spain"]
     };
+;
 
     function getSelectedCities() {
       const selectedCheckboxes = document.querySelectorAll(".dlc-checkbox:checked");
@@ -91,10 +155,11 @@
         destinationIndex = Math.floor(Math.random() * cities.length);
       } while (destinationIndex === departureIndex);
 
-      document.getElementById("departure").textContent = "Departure City: " + cities[departureIndex];
-      document.getElementById("destination").textContent = "Destination City: " + cities[destinationIndex];
+      document.getElementById("departure").textContent = "🛫 Departure City: " + cities[departureIndex];
+      document.getElementById("destination").textContent = "🛬 Destination City: " + cities[destinationIndex];
     }
   </script>
+  <p1>This is a BETA version and it may have bugs. If you notice any, DM niko_tmp on disocrd.</p1>
 </body>
 </html>
-</html>
+
