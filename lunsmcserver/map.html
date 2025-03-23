@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Server Map</title>
+  <title>MAP | Lun's Minecraft Server Map by NikonixDevelopment</title>
   <style>
     body {
       margin: 0;
       overflow: hidden;
       background-color: #e5e5e5;
       font-family: Arial, sans-serif;
+      touch-action: none; /* Prevents browser default gestures */
     }
 
     .map-container {
@@ -19,7 +20,6 @@
       background-color: #f3f3f3;
       overflow: hidden;
       cursor: grab;
-      touch-action: none; /* Important for pinch + drag */
     }
 
     .map-image {
@@ -69,20 +69,8 @@
   </style>
 </head>
 <body>
-  <script>
-    if (/Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-      document.body.innerHTML = `
-        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center; padding: 20px; font-family: Arial, sans-serif; background-color: #f8f8f8;">
-          <h2 style="color: #333;">Sorry, but this website has not been released for mobile.</h2>
-          <p style="color: #555; font-size: 16px;">If you still want to access the map, please use a computer, or enable "Desktop Site" in your mobile browser settings.</p>
-        </div>
-      `;
-      throw new Error("Mobile access blocked");
-    }
-  </script>
-
   <div class="map-container" id="mapContainer">
-    <img src="asset1.png" alt="Map Image" class="map-image" id="mapImage">
+    <img src="https://raw.githubusercontent.com/NikonixDevelopment/lumsmcservermap/cf8fb7335d3f79d32fdddfed43386174d1033af0/asset1.png" alt="Map Image" class="map-image" id="mapImage">
     <div class="map-controls">
       <button onclick="zoomIn()">＋</button>
       <button onclick="zoomOut()">－</button>
@@ -98,7 +86,8 @@
     let offsetX = 0;
     let offsetY = 0;
     let isDragging = false;
-    let startX, startY;
+    let startX = 0;
+    let startY = 0;
 
     function updateTransform() {
       mapImage.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${zoom})`;
@@ -114,37 +103,12 @@
       updateTransform();
     }
 
-    // Mouse Wheel Zoom
-    mapContainer.addEventListener("wheel", (e) => {
-      e.preventDefault();
-      const oldZoom = zoom;
-      zoom *= e.deltaY < 0 ? 1.1 : 0.9;
-
-      const rect = mapImage.getBoundingClientRect();
-      const mouseX = e.clientX - rect.left;
-      const mouseY = e.clientY - rect.top;
-
-      offsetX -= (mouseX / oldZoom) * (zoom - oldZoom);
-      offsetY -= (mouseY / oldZoom) * (zoom - oldZoom);
-      updateTransform();
-    });
-
-    // Mouse Drag
+    // Mouse drag
     mapContainer.addEventListener("mousedown", (e) => {
       isDragging = true;
       startX = e.clientX;
       startY = e.clientY;
       mapContainer.style.cursor = "grabbing";
-    });
-
-    mapContainer.addEventListener("mouseup", () => {
-      isDragging = false;
-      mapContainer.style.cursor = "grab";
-    });
-
-    mapContainer.addEventListener("mouseleave", () => {
-      isDragging = false;
-      mapContainer.style.cursor = "grab";
     });
 
     mapContainer.addEventListener("mousemove", (e) => {
@@ -159,68 +123,65 @@
       }
     });
 
-    // Touch Handling
-    let lastTouchDist = null;
-    let lastTouchMid = null;
-    let isTouchDragging = false;
+    mapContainer.addEventListener("mouseup", () => {
+      isDragging = false;
+      mapContainer.style.cursor = "grab";
+    });
+
+    mapContainer.addEventListener("mouseleave", () => {
+      isDragging = false;
+      mapContainer.style.cursor = "grab";
+    });
+
+    // Scroll to zoom (mouse)
+    mapContainer.addEventListener("wheel", (e) => {
+      e.preventDefault();
+      const oldZoom = zoom;
+      if (e.deltaY < 0) {
+        zoom *= 1.1;
+      } else {
+        zoom /= 1.1;
+      }
+
+      const rect = mapImage.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+
+      offsetX -= (mouseX / oldZoom) * (zoom - oldZoom);
+      offsetY -= (mouseY / oldZoom) * (zoom - oldZoom);
+
+      updateTransform();
+    });
+
+    // Touch drag - allow any number of fingers
+    let lastTouchX = 0;
+    let lastTouchY = 0;
 
     mapContainer.addEventListener("touchstart", (e) => {
-      if (e.touches.length === 1) {
-        isTouchDragging = true;
-        startX = e.touches[0].clientX;
-        startY = e.touches[0].clientY;
-      } else if (e.touches.length === 2) {
-        isTouchDragging = false;
-        lastTouchDist = getDistance(e.touches[0], e.touches[1]);
-        lastTouchMid = getMidpoint(e.touches[0], e.touches[1]);
+      if (e.touches.length >= 1) {
+        isDragging = true;
+        lastTouchX = e.touches[0].clientX;
+        lastTouchY = e.touches[0].clientY;
       }
     });
 
     mapContainer.addEventListener("touchmove", (e) => {
-      e.preventDefault();
-      if (e.touches.length === 1 && isTouchDragging) {
-        const dx = e.touches[0].clientX - startX;
-        const dy = e.touches[0].clientY - startY;
-        startX = e.touches[0].clientX;
-        startY = e.touches[0].clientY;
+      if (isDragging) {
+        e.preventDefault();
+        const touch = e.touches[0]; // just follow the first finger
+        const dx = touch.clientX - lastTouchX;
+        const dy = touch.clientY - lastTouchY;
+        lastTouchX = touch.clientX;
+        lastTouchY = touch.clientY;
         offsetX += dx;
         offsetY += dy;
         updateTransform();
-      } else if (e.touches.length === 2) {
-        const newDist = getDistance(e.touches[0], e.touches[1]);
-        const newMid = getMidpoint(e.touches[0], e.touches[1]);
-
-        const scaleChange = newDist / lastTouchDist;
-        const oldZoom = zoom;
-        zoom *= scaleChange;
-
-        offsetX -= (newMid.x / oldZoom) * (zoom - oldZoom);
-        offsetY -= (newMid.y / oldZoom) * (zoom - oldZoom);
-
-        lastTouchDist = newDist;
-        lastTouchMid = newMid;
-
-        updateTransform();
       }
-    });
+    }, { passive: false });
 
     mapContainer.addEventListener("touchend", () => {
-      isTouchDragging = false;
-      lastTouchDist = null;
+      isDragging = false;
     });
-
-    function getDistance(touch1, touch2) {
-      const dx = touch2.clientX - touch1.clientX;
-      const dy = touch2.clientY - touch1.clientY;
-      return Math.sqrt(dx * dx + dy * dy);
-    }
-
-    function getMidpoint(touch1, touch2) {
-      return {
-        x: (touch1.clientX + touch2.clientX) / 2,
-        y: (touch1.clientY + touch2.clientY) / 2
-      };
-    }
 
     // Initial render
     updateTransform();
