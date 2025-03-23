@@ -1,190 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MAP | Lun's Minecraft Server Map by NikonixDevelopment</title>
-  <style>
-    body {
-      margin: 0;
-      overflow: hidden;
-      background-color: #e5e5e5;
-      font-family: Arial, sans-serif;
-      touch-action: none; /* Prevents browser default gestures */
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Map</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
 
-    .map-container {
-      width: 100vw;
-      height: 100vh;
-      position: relative;
-      background-color: #f3f3f3;
-      overflow: hidden;
-      cursor: grab;
-    }
-
-    .map-image {
-      position: absolute;
-      top: 0;
-      left: 0;
-      transform-origin: top left;
-      image-rendering: pixelated;
-      image-rendering: crisp-edges;
-      user-select: none;
-      pointer-events: none;
-    }
-
-    .map-controls {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      z-index: 10;
-    }
-
-    .map-controls button {
-      background-color: white;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      padding: 8px;
-      cursor: pointer;
-      font-size: 16px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
-    }
-
-    .footer {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background-color: rgba(255, 255, 255, 0.9);
-      text-align: center;
-      font-size: 14px;
-      color: #444;
-      padding: 6px 0;
-      border-top: 1px solid #ccc;
-      z-index: 10;
-    }
-  </style>
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
 </head>
 <body>
-  <div class="map-container" id="mapContainer">
-    <img src="https://raw.githubusercontent.com/NikonixDevelopment/nikonixdevelopment.github.io/refs/heads/main/lunsmcserver/asset1.png" alt="Map Image" class="map-image" id="mapImage">
-    <div class="map-controls">
-      <button onclick="zoomIn()">＋</button>
-      <button onclick="zoomOut()">－</button>
-    </div>
-    <div class="footer">Last updated: 23/03/2025 2:48</div>
-  </div>
 
-  <script>
-    const mapContainer = document.getElementById("mapContainer");
-    const mapImage = document.getElementById("mapImage");
-
-    let zoom = 1;
-    let offsetX = 0;
-    let offsetY = 0;
-    let isDragging = false;
-    let startX = 0;
-    let startY = 0;
-
-    function updateTransform() {
-      mapImage.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${zoom})`;
-    }
-
-    function zoomIn() {
-      zoom *= 1.1;
-      updateTransform();
-    }
-
-    function zoomOut() {
-      zoom /= 1.1;
-      updateTransform();
-    }
-
-    // Mouse drag
-    mapContainer.addEventListener("mousedown", (e) => {
-      isDragging = true;
-      startX = e.clientX;
-      startY = e.clientY;
-      mapContainer.style.cursor = "grabbing";
-    });
-
-    mapContainer.addEventListener("mousemove", (e) => {
-      if (isDragging) {
-        const dx = e.clientX - startX;
-        const dy = e.clientY - startY;
-        startX = e.clientX;
-        startY = e.clientY;
-        offsetX += dx;
-        offsetY += dy;
-        updateTransform();
-      }
-    });
-
-    mapContainer.addEventListener("mouseup", () => {
-      isDragging = false;
-      mapContainer.style.cursor = "grab";
-    });
-
-    mapContainer.addEventListener("mouseleave", () => {
-      isDragging = false;
-      mapContainer.style.cursor = "grab";
-    });
-
-    // Scroll to zoom (mouse)
-    mapContainer.addEventListener("wheel", (e) => {
-      e.preventDefault();
-      const oldZoom = zoom;
-      if (e.deltaY < 0) {
-        zoom *= 1.1;
-      } else {
-        zoom /= 1.1;
-      }
-
-      const rect = mapImage.getBoundingClientRect();
-      const mouseX = e.clientX - rect.left;
-      const mouseY = e.clientY - rect.top;
-
-      offsetX -= (mouseX / oldZoom) * (zoom - oldZoom);
-      offsetY -= (mouseY / oldZoom) * (zoom - oldZoom);
-
-      updateTransform();
-    });
-
-    // Touch drag - allow any number of fingers
-    let lastTouchX = 0;
-    let lastTouchY = 0;
-
-    mapContainer.addEventListener("touchstart", (e) => {
-      if (e.touches.length >= 1) {
-        isDragging = true;
-        lastTouchX = e.touches[0].clientX;
-        lastTouchY = e.touches[0].clientY;
-      }
-    });
-
-    mapContainer.addEventListener("touchmove", (e) => {
-      if (isDragging) {
-        e.preventDefault();
-        const touch = e.touches[0]; // just follow the first finger
-        const dx = touch.clientX - lastTouchX;
-        const dy = touch.clientY - lastTouchY;
-        lastTouchX = touch.clientX;
-        lastTouchY = touch.clientY;
-        offsetX += dx;
-        offsetY += dy;
-        updateTransform();
-      }
-    }, { passive: false });
-
-    mapContainer.addEventListener("touchend", () => {
-      isDragging = false;
-    });
-
-    // Initial render
-    updateTransform();
-  </script>
+    <iframe src="http://78.60.49.100:25535"></iframe>
 </body>
 </html>
