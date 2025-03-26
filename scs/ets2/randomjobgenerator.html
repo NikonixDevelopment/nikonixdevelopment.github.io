@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ETS2 Job Generator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f4f4f4, #e0e7ff);
+      margin: 0;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 36px;
+      font-weight: 600;
+      margin-bottom: 30px;
+      color: #2c3e50;
+      text-shadow: 1px 1px 2px #ccc;
+    }
+
+    .dlc-group {
+      background-color: #ffffff;
+      padding: 25px;
+      margin: 0 auto 30px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      text-align: left;
+    }
+
+    .dlc-group strong {
+      display: block;
+      font-size: 20px;
+      margin-bottom: 15px;
+      color: #34495e;
+    }
+
+    .dlc-group label {
+      display: block;
+      margin: 8px 0;
+      font-size: 16px;
+      color: #444;
+      cursor: pointer;
+    }
+
+    .dlc-group input[type="checkbox"] {
+      margin-right: 10px;
+      transform: scale(1.2);
+    }
+
+    button {
+      padding: 12px 28px;
+      font-size: 16px;
+      border: none;
+      border-radius: 12px;
+      background-color: #6366f1;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 6px 14px rgba(99, 102, 241, 0.3);
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #4f46e5;
+      transform: scale(1.05);
+    }
+
+    #departure, #destination {
+      font-size: 22px;
+      margin-top: 25px;
+      color: #2c3e50;
+      font-weight: 500;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 28px;
+      }
+
+      .dlc-group {
+        padding: 20px;
+      }
+
+      button {
+        width: 100%;
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🚚 ETS2 Job Generator</h1>
+
+  <div class="dlc-group">
+    <strong>Select DLC Areas:</strong>
+    <label><input type="checkbox" value="base" class="dlc-checkbox"> Base Game</label>
+    <label><input type="checkbox" value="west" class="dlc-checkbox"> West Balkans DLC</label>
+    <label><input type="checkbox" value="road" class="dlc-checkbox"> Road to Black Sea DLC</label>
+    <label><input type="checkbox" value="east" class="dlc-checkbox"> Going East DLC</label>
+    <label><input type="checkbox" value="scandinavia" class="dlc-checkbox"> SCANDINAVIA DLC</label>
+    <label><input type="checkbox" value="baltic" class="dlc-checkbox"> Baltic DLC</label>
+    <label><input type="checkbox" value="france" class="dlc-checkbox"> Vive la France DLC</label>
+    <label><input type="checkbox" value="greece" class="dlc-checkbox"> GREECE DLC</label>
+    <label><input type="checkbox" value="italia" class="dlc-checkbox"> Italia DLC</label>
+    <label><input type="checkbox" value="iberia" class="dlc-checkbox"> Iberia DLC</label>
+  </div>
+
+  <button onclick="selectCities()">🎯 Select Cities</button>
+  <div id="departure"></div>
+  <div id="destination"></div>
+
+  <script>
+    const cityData = {
+      // your entire cityData object remains unchanged
+      base: ["Graz, Austria", "Innsbruck, Austria", "Klagenfurt am Wörthersee, Austria", "Linz, Austria", "Salzburg, Austria", "Wien, Austria", "Brussel, Belgium", "Liège, Belgium", "Lille, France", "Calais, France", "Paris, France", "Berlin, Germany", "Bremen, Germany", "Dortmund, Germany", "Dresden, Germany", "Duisburg, Germany", "Düsseldorf, Germany", "Erfurt, Germany", "Frankfurt am Main, Germany", "Hamburg, Germany", "Hannover, Germany", "Kassel, Germany", "Kiel, Germany", "Köln, Germany", "Leipzig, Germany", "Magdeburg, Germany", "Mannheim, Germany", "München, Germany", "Nürnberg, Germany", "Osnabrück, Germany", "Rostock, Germany", "Stuttgart, Germany", "Travemünde, Germany", "Werlte, Germany", "Winsen, Germany", "Luxembourg, Luxembourg", "Amsterdam, Netherlands", "Groningen, Netherlands", "Rotterdam, Netherlands", "Poznań, Poland", "Szczecin, Poland", "Wrocław, Poland", "Bern, Switzerland", "Genève, Switzerland", "Zürich, Switzerland", "Aberdeen, United Kingdom", "Birmingham, United Kingdom", "Cambridge, United Kingdom", "Cardiff, United Kingdom", "Carlisle, United Kingdom", "Dover, United Kingdom", "Edinburgh, United Kingdom", "Felixstowe, United Kingdom", "Glasgow, United Kingdom", "Grimsby, United Kingdom", "Liverpool, United Kingdom", "London, United Kingdom", "Manchester, United Kingdom", "Newcastle-upon-Tyne, United Kingdom", "Plymouth, United Kingdom", "Sheffield, United Kingdom", "Southampton, United Kingdom", "Swansea, United Kingdom"],
+      west: ["Durrës, Albania", "Fier, Albania", "Tiranë, Albania", "Vlorë, Albania", "Banja Luka, Bosnia and Herzegovina", "Bihać, Bosnia and Herzegovina", "Mostar, Bosnia and Herzegovina", "Sarajevo, Bosnia and Herzegovina", "Tuzla, Bosnia and Herzegovina", "Zenica, Bosnia and Herzegovina", "Prishtinë, Kosovo", "Bijelo Polje, Montenegro", "Nikšić, Montenegro", "Podgorica, Montenegro", "Bitola, North Macedonia", "Skopje, North Macedonia", "Belgrade, Serbia", "Kragujevac, Serbia", "Niš, Serbia", "Novi Sad, Serbia", "Koper, Slovenia", "Ljubljana, Slovenia", "Maribor, Slovenia", "Novo Mesto, Slovenia"],
+      road: ["Burgas, Bulgaria", "Karlovo, Bulgaria", "Kozloduy, Bulgaria", "Pernik, Bulgaria", "Pirdop, Bulgaria", "Pleven, Bulgaria", "Plovdiv, Bulgaria", "Ruse, Bulgaria", "Sofia, Bulgaria", "Varna, Bulgaria", "Veliko Tarnovo, Bulgaria", "Osijek, Croatia", "Rijeka, Croatia", "Split, Croatia", "Zadar, Croatia", "Zagreb, Croatia", "Bacău, Romania", "Brașov, Romania", "București, Romania", "Cernavodă, Romania", "Cluj-Napoca, Romania", "Constanța, Romania", "Craiova, Romania", "Călărași, Romania", "Galați, Romania", "Hunedoara, Romania", "Iași, Romania", "Mangalia, Romania", "Pitești, Romania", "Reșița, Romania", "Timișoara, Romania", "Târgu Mureș, Romania", "Edirne, Turkey", "Tekirdağ, Turkey", "İstanbul, Turkey"],
+      east: ["Brno, Czech Republic", "Ostrava, Czech Republic", "Praha, Czech Republic", "Budapest, Hungary", "Debrecen, Hungary", "Pécs, Hungary", "Szeged, Hungary", "Białystok, Poland", "Gdańsk, Poland", "Katowice, Poland", "Kraków, Poland", "Lublin, Poland", "Olsztyn, Poland", "Szczecin, Poland", "Warszawa, Poland", "Wrocław, Poland", "Łódź, Poland", "Banská Bystrica, Slovakia", "Bratislava, Slovakia", "Košice, Slovakia"],
+      scandinavia: ["Aalborg, Denmark", "Esbjerg, Denmark", "Frederikshavn, Denmark", "Gedser, Denmark", "Hirtshals, Denmark", "København, Denmark", "Odense, Denmark", "Helsinki, Finland", "Kotka, Finland", "Kouvola, Finland", "Lahti, Finland", "Loviisa, Finland", "Naantali, Finland", "Olkiluoto, Finland", "Pori, Finland", "Tampere, Finland", "Turku, Finland", "Bergen, Norway", "Kristiansand, Norway", "Oslo, Norway", "Stavanger, Norway", "Göteborg, Sweden", "Helsingborg, Sweden", "Jönköping, Sweden", "Kalmar, Sweden", "Kapellskär, Sweden", "Karlskrona, Sweden", "Linköping, Sweden", "Malmö, Sweden", "Nynäshamn, Sweden", "Stockholm, Sweden", "Södertälje, Sweden", "Trelleborg, Sweden", "Uppsala, Sweden", "Västerås, Sweden", "Växjö, Sweden", "Örebro, Sweden"],
+      baltic: ["Kunda, Estonia", "Narva, Estonia", "Paldiski, Estonia", "Pärnu, Estonia", "Tallinn, Estonia", "Tartu, Estonia", "Daugavpils, Latvia", "Liepāja, Latvia", "Rēzekne, Latvia", "Rīga, Latvia", "Valmiera, Latvia", "Ventspils, Latvia", "Kaunas, Lithuania", "Klaipėda, Lithuania", "Mažeikiai, Lithuania", "Panevėžys, Lithuania", "Šiauliai, Lithuania", "Utena, Lithuania", "Vilnius, Lithuania", "Kaliningrad, Russia", "Luga, Russia", "Pskov, Russia", "Saint Petersburg, Russia", "Sosnovy Bor, Russia", "Vyborg, Russia"],
+      france: ["Ajaccio, France", "Bastia, France", "Bayonne, France", "Bonifacio, France", "Bordeaux, France", "Bourges, France", "Brest, France", "Calvi, France", "Civaux, France", "Clermont-Ferrand, France", "Golfech, France", "La Rochelle, France", "L'Île-Rousse, France", "Lacq, France", "Le Havre, France", "Le Mans, France",  "Limoges, France", "Lyon, France", "Marseille, France", "Metz, France", "Montpellier, France", "Nice, France", "Paluel, France", "Porto-Vecchio, France", "Reims, France", "Rennes, France", "Roscoff, France", "Saint-Alban-du-Rhône, France", "Saint-Laurent, France", "Strasbourg, France", "Toulouse, France"],
+      greece: ["Argostoli, Greece", "Athens, Greece", "Chania, Greece", "Chios, Greece", "Heraklion, Greece", "Ioannina, Greece", "Kalamata, Greece", "Kavala, Greece", "Lamia, Greece", "Larissa, Greece", "Mitilini, Greece", "Patras, Greece", "Rhodes, Greece", "Thessaloniki, Greece", "Trikala, Greece"],
+      italia: ["Ancona, Italy", "Bari, Italy", "Bologna, Italy", "Cagliari, Italy", "Cassino, Italy", "Catania, Italy", "Catanzaro, Italy", "Firenze, Italy", "Genova, Italy", "Livorno, Italy", "Messina, Italy", "Milano, Italy", "Napoli, Italy", "Olbia, Italy", "Palermo, Italy", "Parma, Italy", "Pescara, Italy", "Roma, Italy", "Sassari, Italy", "Taranto, Italy", "Terni, Italy", "Torino, Italy", "Trieste, Italy", "Venezia, Italy", "Verona, Italy", "Villa San Giovanni, Italy", "Suzzara, Italy"],
+      iberia: ["Beja, Portugal", "Coimbra, Portugal", "Cortiçadas de Lavre, Portugal", "Faro, Portugal", "Guarda, Portugal", "Lisboa, Portugal", "Olhão, Portugal", "Ponte de Sor, Portugal", "Porto, Portugal", "Setúbal, Portugal", "Sines, Portugal", "Évora, Portugal", "A Coruña, Spain", "Albacete, Spain", "Algeciras, Spain", "Almaraz, Spain", "Almería, Spain", "Badajoz, Spain", "Bailén, Spain", "Barcelona, Spain", "Bilbao, Spain", "Burgos, Spain", "Ciudad Real, Spain", "Córdoba, Spain", "El Ejido, Spain", "Gijón, Spain", "Granada, Spain", "Huelva, Spain", "León, Spain", "Lleida, Spain", "Madrid, Spain", "Mengíbar, Spain", "Murcia, Spain", "Málaga, Spain", "Navia, Spain", "O Barco, Spain", "Pamplona, Spain", "Port de Sagunt, Spain", "Puertollano, Spain", "Salamanca, Spain", "Santander, Spain", "Sevilla, Spain", "Soria, Spain", "Tarragona, Spain", "Teruel, Spain", "Valladolid, Spain", "València, Spain", "Vandellòs, Spain", "Vigo, Spain", "Vila-real, Spain", "Zaragoza, Spain"]
+    };
+;
+
+    function getSelectedCities() {
+      const selectedCheckboxes = document.querySelectorAll(".dlc-checkbox:checked");
+      const selectedDLCs = Array.from(selectedCheckboxes).map(cb => cb.value);
+      let selectedCities = [];
+      selectedDLCs.forEach(dlc => {
+        if (cityData[dlc]) {
+          selectedCities = selectedCities.concat(cityData[dlc]);
+        }
+      });
+      return selectedCities;
+    }
+
+    function selectCities() {
+      const cities = getSelectedCities();
+      if (cities.length < 2) {
+        alert("Please select at least one DLC with more than one city.");
+        return;
+      }
+      let departureIndex = Math.floor(Math.random() * cities.length);
+      let destinationIndex;
+      do {
+        destinationIndex = Math.floor(Math.random() * cities.length);
+      } while (destinationIndex === departureIndex);
+
+      document.getElementById("departure").textContent = "🛫 Departure City: " + cities[departureIndex];
+      document.getElementById("destination").textContent = "🛬 Destination City: " + cities[destinationIndex];
+    }
+  </script>
+  <p1>This is a BETA version and it may have bugs. If you notice any, DM niko_tmp on Discord</p1>
+</body>
+</html>
+

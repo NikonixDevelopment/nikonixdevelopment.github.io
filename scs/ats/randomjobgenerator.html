@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ATS Job Generator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f4f4f4, #e0e7ff);
+      margin: 0;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 36px;
+      font-weight: 600;
+      margin-bottom: 30px;
+      color: #2c3e50;
+      text-shadow: 1px 1px 2px #ccc;
+    }
+
+    .dlc-group {
+      background-color: #ffffff;
+      padding: 25px;
+      margin: 0 auto 30px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      text-align: left;
+    }
+
+    .dlc-group strong {
+      display: block;
+      font-size: 20px;
+      margin-bottom: 15px;
+      color: #34495e;
+    }
+
+    .dlc-group label {
+      display: block;
+      margin: 8px 0;
+      font-size: 16px;
+      color: #444;
+      cursor: pointer;
+    }
+
+    .dlc-group input[type="checkbox"] {
+      margin-right: 10px;
+      transform: scale(1.2);
+    }
+
+    button {
+      padding: 12px 28px;
+      font-size: 16px;
+      border: none;
+      border-radius: 12px;
+      background-color: #6366f1;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 6px 14px rgba(99, 102, 241, 0.3);
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #4f46e5;
+      transform: scale(1.05);
+    }
+
+    #departure, #destination {
+      font-size: 22px;
+      margin-top: 25px;
+      color: #2c3e50;
+      font-weight: 500;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 28px;
+      }
+
+      .dlc-group {
+        padding: 20px;
+      }
+
+      button {
+        width: 100%;
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🚚 ATS Job Generator</h1>
+
+  <div class="dlc-group">
+    <strong>Select DLC Areas:</strong>
+    <label><input type="checkbox" value="base" class="dlc-checkbox"> Base Game</label>
+    <label><input type="checkbox" value="arizona" class="dlc-checkbox"> Arizona</label>
+    <label><input type="checkbox" value="newmexico" class="dlc-checkbox"> New Mexico</label>
+    <label><input type="checkbox" value="oregon" class="dlc-checkbox"> Oregon</label>
+    <label><input type="checkbox" value="washington" class="dlc-checkbox"> Washington</label>
+    <label><input type="checkbox" value="utah" class="dlc-checkbox"> Utah</label>
+    <label><input type="checkbox" value="idaho" class="dlc-checkbox"> Idaho</label>
+    <label><input type="checkbox" value="colorado" class="dlc-checkbox"> Colorado</label>
+    <label><input type="checkbox" value="wyoming" class="dlc-checkbox"> Wyoming</label>
+    <label><input type="checkbox" value="montana" class="dlc-checkbox"> Montana</label>
+    <label><input type="checkbox" value="texas" class="dlc-checkbox"> Texas</label>
+    <label><input type="checkbox" value="oklahoma" class="dlc-checkbox"> Oklahoma</label>
+    <label><input type="checkbox" value="kansas" class="dlc-checkbox"> Kansas</label>
+    <label><input type="checkbox" value="nebraska" class="dlc-checkbox"> Nebraska</label>
+    <label><input type="checkbox" value="arkansas" class="dlc-checkbox"> Arkansas</label>
+    <label><input type="checkbox" value="missouri" class="dlc-checkbox"> Missouri</label>
+  </div>
+
+  <button onclick="selectCities()">🎯 Select Cities</button>
+  <div id="departure"></div>
+  <div id="destination"></div>
+
+  <script>
+    const cityData = {
+      // your entire cityData object remains unchanged
+      base: ["Bakersfield", "Barstow", "Blythe", "El Centro", "Eureka", "Fresno", "Hilt", "Huron", "Indio", "Los Angeles", "Modesto", "Mojave", "Oakland", "Oxnard", "Redding", "Sacramento", "San Diego", "San Francisco", "San Jose", "Santa Cruz", "Santa Maria", "Stockton", "Truckee", "Ukiah", "Carson City", "Elko", "Ely", "Jackpot", "Las Vegas", "Pioche", "Primm", "Reno", "Tonopah", "Winnemucca"],
+      arizona: ["Camp Verde", "Clifton", "Ehrenberg", "Flagstaff", "Grand Canyon Village", "Holbrook", "Kayenta", "Kingman", "Nogales", "Page", "Phoenix", "San Simon", "Show Low", "Sierra Vista", "Tucson", "Yuma"],
+      newmexico: ["Alamogordo", "Albuquerque", "Artesia", "Carlsbad (New Mexico)", "Clovis", "Farmington", "Gallup", "Hobbs", "Las Cruces", "Raton", "Roswell", "Santa Fe", "Socorro", "Tucumcari"],
+      oregon: ["Astoria", "Bend", "Burns", "Coos Bay", "Eugene", "Klamath Falls", "Lakeview", "Medford", "Newport", "Ontario", "Pendleton", "Portland", "Salem", "The Dalles"],
+      washington: ["Aberdeen", "Bellingham", "Colville", "Everett", "Grand Coulee", "Kennewick", "Longview", "Olympia", "Omak", "Port Angeles", "Seattle", "Spokane", "Tacoma", "Vancouver", "Wenatchee", "Yakima"],
+      utah: ["Cedar City", "Logan", "Moab", "Ogden", "Price", "Provo", "Salina (Utah)", "Salt Lake City", "St. George", "Vernal"],
+      idaho: ["Boise", "Coeur d'Alene", "Grangeville", "Idaho Falls", "Ketchum", "Lewiston", "Nampa", "Pocatello", "Salmon", "Sandpoint", "Twin Falls"],
+      colorado: ["Alamosa", "Burlington", "Colorado Springs", "Denver", "Durango", "Fort Collins", "Grand Junction", "Lamar", "Montrose", "Pueblo", "Rangely", "Steamboat Springs", "Sterling"],
+      wyoming: ["Casper", "Cheyenne", "Cody", "Evanston", "Gillette", "Jackson", "Laramie", "Rawlins", "Riverton", "Rock Springs", "Sheridan"],
+      montana: ["Billings", "Bozeman", "Butte", "Glasgow", "Glendive", "Great Falls", "Havre", "Helena", "Kalispell", "Laurel", "Lewistown", "Miles City", "Missoula", "Sidney", "Thompson Falls"],
+      texas: ["Abilene", "Amarillo", "Austin", "Beaumont", "Brownsville", "Corpus Christi", "Dalhart", "Dallas", "Del Rio", "El Paso", "Fort Stockton", "Fort Worth", "Galveston", "Houston", "Huntsville", "Junction", "Laredo", "Longview", "Lubbock", "Lufkin", "McAllen", "Odessa", "San Angelo", "San Antonio", "Texarkana (Texas)", "Tyler", "Van Horn", "Victoria", "Waco", "Wichita Falls"],
+      oklahoma: ["Ardmore", "Clinton", "Enid", "Guymon", "Idabel", "Lawton", "McAlester", "Oklahoma City", "Tulsa", "Woodward"],
+      kansas: ["Colby", "Dodge City", "Emporia", "Garden City", "Hays", "Hutchinson", "Junction City", "Kansas City (Kansas)", "Marysville", "Phillipsburg", "Pittsburg", "Salina (Kansas)", "Topeka", "Wichita"],
+      nebraska: ["Alliance", "Chadron", "Columbus", "Grand Island", "Lincoln", "McCook", "Norfolk", "North Platte", "Omaha", "Scottsbluff", "Sidney", "Valentine"],
+      arkansas: ["El Dorado", "Fayetteville", "Fort Smith", "Harrison", "Hot Springs", "Jonesboro", "Little Rock", "Pine Bluff", "Springdale", "Texarkana (Arkansas)"],
+      missouri: ["Cape Girardeau", "Columbia", "Jefferson City", "Joplin", "Kirksville", "Maryville", "Poplar Bluff", "Rolla", "Saint Joseph", "Saint Louis", "Springfield"]
+    };
+;
+
+    function getSelectedCities() {
+      const selectedCheckboxes = document.querySelectorAll(".dlc-checkbox:checked");
+      const selectedDLCs = Array.from(selectedCheckboxes).map(cb => cb.value);
+      let selectedCities = [];
+      selectedDLCs.forEach(dlc => {
+        if (cityData[dlc]) {
+          selectedCities = selectedCities.concat(cityData[dlc]);
+        }
+      });
+      return selectedCities;
+    }
+
+    function selectCities() {
+      const cities = getSelectedCities();
+      if (cities.length < 2) {
+        alert("Please select at least one DLC with more than one city.");
+        return;
+      }
+      let departureIndex = Math.floor(Math.random() * cities.length);
+      let destinationIndex;
+      do {
+        destinationIndex = Math.floor(Math.random() * cities.length);
+      } while (destinationIndex === departureIndex);
+
+      document.getElementById("departure").textContent = "🛫 Departure City: " + cities[departureIndex];
+      document.getElementById("destination").textContent = "🛬 Destination City: " + cities[destinationIndex];
+    }
+  </script>
+  <p1>This is a BETA version and it may have bugs. If you notice any, DM niko_tmp on Discord</p1>
+</body>
+</html>
