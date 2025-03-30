@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live HTML Editor</title>
+    <style>
+        body {
+            display: flex;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            flex-direction: column;
+        }
+        .buttons {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            padding: 10px;
+            background-color: #5c5c5c;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #444;
+        }
+        .editor-container {
+            display: flex;
+            margin-top: 50px; /* Adjusted space to avoid overlap with buttons */
+            height: 100%;
+        }
+        textarea {
+            width: 50%;
+            height: 100%;
+            border: none;
+            padding: 15px;
+            font-size: 16px;
+            resize: none;
+            outline: none;
+            background: #2b2b2b;
+            color: #f8f8f2;
+            font-family: monospace;
+            border-right: 2px solid #444;
+        }
+        iframe {
+            width: 50%;
+            height: 100%;
+            border: none;
+            background: white;
+            box-shadow: -3px 0 5px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="buttons">
+        <button onclick="exportCode()">Export</button>
+        <button onclick="importCode()">Import</button>
+        <button onclick="clearCode()">Clear</button>
+    </div>
+    <div class="editor-container">
+        <textarea id="htmlInput" placeholder="Type HTML here..."><h1>HTML</h1></textarea>
+        <iframe id="output"></iframe>
+    </div>
+
+    <script>
+        const input = document.getElementById('htmlInput');
+        const output = document.getElementById('output').contentDocument;
+
+        function updateOutput() {
+            output.open();
+            output.write(input.value);
+            output.close();
+        }
+
+        input.addEventListener('input', updateOutput);
+
+        input.addEventListener('keydown', function(event) {
+            if (event.key === '>') {
+                const start = input.selectionStart;
+                const value = input.value;
+                
+                const tagMatch = value.substring(0, start).match(/<([a-zA-Z0-9]+)$/);
+                if (tagMatch) {
+                    const tagName = tagMatch[1];
+                    const endTag = `</${tagName}>`;
+                    
+                    input.value = value.substring(0, start) + '>' + endTag + value.substring(start);
+                    input.selectionStart = input.selectionEnd = start + 1;
+                    event.preventDefault();
+                }
+            }
+        });
+
+        updateOutput(); // Initialize with default text
+
+        function exportCode() {
+            const blob = new Blob([input.value], { type: 'text/html' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'code.html';
+            link.click();
+        }
+
+        function importCode() {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = '.html';
+            fileInput.onchange = function(event) {
+                const file = event.target.files[0];
+                const reader = new FileReader();
+                
+                reader.onload = function(fileEvent) {
+                    const code = fileEvent.target.result;
+                    if (input.value.trim() !== "") {
+                        const confirmImport = confirm("Are you sure you want to remove all the current code and import another file?");
+                        if (confirmImport) {
+                            input.value = code;
+                            updateOutput();
+                        }
+                    } else {
+                        input.value = code;
+                        updateOutput();
+                    }
+                };
+
+                reader.readAsText(file);
+            };
+
+            fileInput.click();
+        }
+
+        function clearCode() {
+            const confirmClear = confirm("DO YOU REALLY WANT TO CLEAR CODE? THIS CANNOT BE UNDONE");
+            if (confirmClear) {
+                input.value = "";
+                updateOutput();
+            }
+        }
+    </script>
+</body>
+</html>
