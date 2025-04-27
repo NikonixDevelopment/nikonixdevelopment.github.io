@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta property="og:title" content="Automatic Phonetic Encrypter - NikonixDevelopment">
+    <meta property="og:description" content="Encrypt and Decrypt phonetic alphabet automatically!">
+    <meta property="og:image" content="https://raw.githubusercontent.com/NikonixDevelopment/nikonixdevelopment.github.io/refs/heads/main/assets/channels4_profile.jpg">
+    <meta property="og:url" content="https://nikonixdevelopment.github.io/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automatic Phonetic Encrypter by NikonixDevelopment</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+            background-image: url('https://raw.githubusercontent.com/NikonixDevelopment/FF0329/refs/heads/main/dhmpxsi-39a63cee-4f40-46e3-a191-ad9849f9bbd2.png');
+            background-size: cover;
+            color: black; /* Set text color to black */
+        }
+
+        textarea {
+            width: 80%;
+            height: 100px;
+            font-size: 16px;
+            color: black; /* Set text color to black */
+        }
+
+        button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+            color: black; /* Set text color to black */
+        }
+
+        h2, h3 {
+            color: black; /* Set text color to black for headings */
+        }
+
+        #tip {
+            color: black; /* Set text color to black for the tip */
+            font-size: 16px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Automatic Phonetic Encrypter by NikonixDevelopment</h2>
+    <textarea id="inputText" placeholder="Enter text to encrypt/decrypt..."></textarea><br>
+    <button onclick="encryptText()">Encrypt</button>
+    <button onclick="decryptText()">Decrypt</button>
+    <button onclick="downloadText()">Download .nik</button>
+    <input type="file" id="fileInput" accept=".nik" onchange="uploadText()">
+    <h3>Output:</h3>
+    <textarea id="outputText" readonly></textarea>
+
+    <p id="tip">TIP: ANYONE WHO USES THIS WEBSITE CAN ENCRYPT AND DECRYPT DATA</p>
+
+    <script>
+        const encryptionMap = {
+            'A': ['Alfa'],
+            'B': ['Bravo'],
+            'C': ['Charlie'],
+            'D': ['Delta'],
+            'E': ['Echo'],
+            'F': ['Foxtrot'],
+            'G': ['Golf'],
+            'H': ['Hotel'],
+            'I': ['India'],
+            'J': ['Juliett'],
+            'K': ['Kilo'],
+            'L': ['Lima'],
+            'M': ['Mike'],
+            'N': ['November'],
+            'O': ['Oscar'],
+            'P': ['Papa'],
+            'Q': ['Quebec'],
+            'R': ['Romeo'],
+            'S': ['Sierra'],
+            'T': ['Tango'],
+            'U': ['Uniform'],
+            'V': ['Victor'],
+            'W': ['Whiskey'],
+            'X': ['X-ray'],
+            'Y': ['Yankee'],
+            'Z': ['Zulu'],
+            '1': ['1'],
+            '2': ['2'],
+            '3': ['3'],
+            '4': ['4'],
+            '5': ['5'],
+            '6': ['6'],
+            '7': ['7'],
+            '8': ['8'],
+            '9': ['9'],
+            '0': ['10']
+        };
+
+        const decryptionMap = Object.fromEntries(
+            Object.entries(encryptionMap).flatMap(([char, codes]) => codes.map(code => [code, char]))
+        );
+
+        function encryptText() {
+            let input = document.getElementById("inputText").value.toUpperCase();
+            let encryptedText = "\\ ";
+
+            for (let char of input) {
+                if (encryptionMap[char]) {
+                    let key = encryptionMap[char][Math.floor(Math.random() * encryptionMap[char].length)];
+                    encryptedText += key + " ";
+                } else if (char === ' ') {
+                    encryptedText += "_\\_ ";
+                } else {
+                    encryptedText += char + " ";
+                }
+            }
+
+            encryptedText += "\\";
+            document.getElementById("outputText").value = encryptedText;
+        }
+
+        function decryptText() {
+            let input = document.getElementById("inputText").value.trim();
+            if (input.startsWith("\\") && input.endsWith("\\")) {
+                input = input.slice(2, -2).trim();
+            }
+
+            let words = input.split(" ");
+            let decryptedText = "";
+
+            for (let word of words) {
+                if (decryptionMap[word]) {
+                    decryptedText += decryptionMap[word];
+                } else if (word === "_\\_") {
+                    decryptedText += " ";
+                } else {
+                    decryptedText += word;
+                }
+            }
+
+            document.getElementById("outputText").value = decryptedText;
+        }
+
+        function downloadText() {
+            let text = document.getElementById("outputText").value;
+            let blob = new Blob([text], { type: "text/plain" });
+            let a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "encrypted.nik";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        function uploadText() {
+            let fileInput = document.getElementById("fileInput");
+            let file = fileInput.files[0];
+            if (!file) return;
+
+            let reader = new FileReader();
+            reader.onload = function (event) {
+                document.getElementById("inputText").value = event.target.result;
+            };
+            reader.readAsText(file);
+        }
+    </script>
+</body>
+</html>
