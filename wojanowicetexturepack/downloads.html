@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pobierz Wojanowice Texture Pack - Oficjalna Strona Internetowa</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0 10%;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+      text-shadow: 1px 1px 3px #000;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px #000;
+    }
+
+    p, a, pre, code {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-shadow: 1px 1px 3px #000;
+    }
+
+    .download-btn {
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      background-color: #00c853;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      margin-top: 20px;
+    }
+
+    .download-btn:hover {
+      background-color: #00b248;
+      transform: scale(1.05);
+    }
+
+    .download-btn:active {
+      transform: scale(0.97);
+    }
+
+    select {
+      padding: 10px 15px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: none;
+      margin-top: 10px;
+      background-color: #ffffff;
+      color: #000;
+      font-weight: bold;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Pobierz Wojanowice Texture Pack - v3.0.0</h1>
+  <p>Wybierz wersję Minecrafta:</p>
+  <select id="versionSelect">
+    <option value="">-- Wybierz wersję --</option>
+    <option value="http://adfoc.us/872893110883021">1.19.4</option>
+    <option value="http://adfoc.us/872893110883022">1.20</option>
+    <option value="http://adfoc.us/872893110883022">1.20.1</option>
+    <option value="http://adfoc.us/872893110883023">1.20.2</option>
+    <option value="http://adfoc.us/872893110883024">1.20.3</option>
+    <option value="http://adfoc.us/872893110883024">1.20.4</option>
+    <option value="http://adfoc.us/872893110883025">1.20.5</option>
+    <option value="http://adfoc.us/872893110883025">1.20.6</option>
+    <option value="http://adfoc.us/872893110883026">1.21</option>
+    <option value="http://adfoc.us/872893110883026">1.21.1</option>
+    <option value="http://adfoc.us/872893110883027">1.21.2</option>
+    <option value="http://adfoc.us/872893110883027">1.21.3</option>
+    <option value="http://adfoc.us/872893110883028">1.21.4</option>
+    <option value="http://adfoc.us/872893110883029">1.21.5</option>
+    <option value="http://adfoc.us/872893110883030">1.21.6</option>
+  </select>
+
+  <button class="download-btn" onclick="downloadSelected()">Pobierz Teraz</button>
+
+  <script>
+    function downloadSelected() {
+      const select = document.getElementById("versionSelect");
+      const url = select.value;
+      if (url) {
+        window.location.href = url;
+      } else {
+        alert("Proszę wybrać wersję przed pobraniem.");
+      }
+    }
+  </script>
+<p>Jeśli wyświetli się reklama, pomiń ją w prawym rogu strony.
+</body>
+</html>
