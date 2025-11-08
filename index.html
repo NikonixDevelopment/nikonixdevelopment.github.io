@@ -3,113 +3,66 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Radio Stream — Listen Live</title>
+  <title>NikoFM — Full Page Player</title>
+  <meta name="description" content="Full-page embed of NikoFM Zeno.FM player" />
   <style>
-    :root{--bg:#0f1724;--card:#0b1220;--accent:#00c2ff;--muted:#94a3b8;--success:#10b981;--danger:#ef4444}
-    *{box-sizing:border-box}
-    body{font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial; margin:0; min-height:100vh; background:linear-gradient(180deg,#071028 0%, #071022 100%); color:#e6eef8; display:flex; align-items:center; justify-content:center; padding:20px}
-    .card{width:600px; max-width:95vw; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:12px; padding:20px; box-shadow:0 6px 30px rgba(2,6,23,0.6);}
-    h1{text-align:center; font-size:22px; margin-top:0}
-    .status{text-align:center; margin:10px 0}
-    .led{display:inline-block; width:12px; height:12px; border-radius:50%; background:#64748b; margin-right:8px}
-    .led.online{background:var(--success); box-shadow:0 0 8px rgba(16,185,129,0.35)}
-    .led.offline{background:var(--danger); box-shadow:0 0 8px rgba(239,68,68,0.25)}
-    .controls{text-align:center; margin:12px 0}
-    button{background:transparent; border:1px solid rgba(255,255,255,0.06); color:inherit; padding:8px 14px; border-radius:8px; cursor:pointer; margin:0 4px}
-    button.primary{background:linear-gradient(90deg,var(--accent),#7ce3ff); color:#012; border:none}
-    input[type=range]{width:120px;}
-    .ping{text-align:center; font-size:14px; color:var(--muted)}
-    .announcements{margin-top:20px}
-    .announcements h2{text-align:center; font-size:18px; margin-bottom:10px}
-    .ann-list{max-height:200px; overflow:auto;}
-    .ann-item{padding:8px; border-radius:8px; margin-bottom:8px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.04)}
-    .small{font-size:12px; color:var(--muted)}
+    /* Make the iframe fill the entire viewport cleanly */
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: #000; /* dark background during loading */
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color: #fff;
+    }
+
+    .player {
+      position: fixed;
+      inset: 0; /* top:0; right:0; bottom:0; left:0; */
+      display: flex;
+      align-items: stretch;
+      justify-content: stretch;
+    }
+
+    .player iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
+
+    /* Small non-intrusive footer link for credits / fallback */
+    .credits {
+      position: absolute;
+      right: 12px;
+      bottom: 12px;
+      background: rgba(0,0,0,0.55);
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1;
+      text-decoration: none;
+      color: #fff;
+      backdrop-filter: blur(4px);
+    }
+
+    /* Improve keyboard accessibility focus outline */
+    a:focus { outline: 3px solid #7dd3fc; outline-offset: 3px; }
+
+    /* Make sure the player is usable on very small screens */
+    @media (max-width: 420px) {
+      .credits { right: 8px; left: 8px; bottom: 10px; text-align: center; }
+    }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>🎵 Live Radio Stream</h1>
-    <div class="status">
-      <span id="led" class="led offline"></span>
-      <span id="status-text">Checking...</span>
-    </div>
 
-    <div class="controls">
-      <button id="playbtn" class="primary">Play</button>
-      <button id="pausebtn">Pause</button>
-      <label class="small">Vol <input id="vol" type="range" min="0" max="1" step="0.01" value="0.9"></label>
-    </div>
+  <main class="player" role="main">
+    <!-- Full-page Zeno.FM player -->
+    <iframe src="https://zeno.fm/player/nikofm-ko3z" title="NikoFM — Zeno.FM player" scrolling="no" allow="autoplay; encrypted-media; fullscreen"></iframe>
 
-    <div class="ping">
-      Ping: <span id="ping-val">—</span> | Last check: <span id="last-check">—</span>
-    </div>
+    <!-- Fallback / credit link -->
+    <a class="credits" href="https://zeno.fm/" target="_blank" rel="noopener noreferrer">A Zeno.FM Station</a>
+  </main>
 
-    <audio id="player" crossorigin="anonymous"></audio>
-
-    <div class="announcements">
-      <h2>📢 Announcements</h2>
-      <div class="ann-list" id="ann-list">No announcements yet.</div>
-    </div>
-  </div>
-
-  <script>
-    const STREAM_URL = 'https://stream.zeno.fm/uocc2xlzeqftv';
-
-    const player = document.getElementById('player');
-    const playBtn = document.getElementById('playbtn');
-    const pauseBtn = document.getElementById('pausebtn');
-    const vol = document.getElementById('vol');
-    const led = document.getElementById('led');
-    const statusText = document.getElementById('status-text');
-    const pingVal = document.getElementById('ping-val');
-    const lastCheck = document.getElementById('last-check');
-    const annList = document.getElementById('ann-list');
-
-    player.src = STREAM_URL;
-    player.volume = vol.value;
-
-    function setStatus(online){
-      led.classList.toggle('online', online);
-      led.classList.toggle('offline', !online);
-      statusText.textContent = online ? 'Online' : 'Offline';
-    }
-
-    async function pingStream(){
-      const start = performance.now();
-      try{
-        await fetch(STREAM_URL, {method: 'GET', mode: 'no-cors', cache: 'no-store'});
-        const ms = Math.round(performance.now() - start);
-        pingVal.textContent = ms + ' ms';
-        lastCheck.textContent = new Date().toLocaleTimeString();
-        setStatus(true);
-      }catch{
-        setStatus(false);
-        pingVal.textContent = 'error';
-      }
-    }
-
-    playBtn.onclick = ()=>{player.play(); setStatus(true);};
-    pauseBtn.onclick = ()=>{player.pause();};
-    vol.oninput = ()=>{player.volume = vol.value;};
-
-    // load announcements from localStorage (if shared same origin)
-    function loadAnnouncements(){
-      const raw = localStorage.getItem('radio_announcements');
-      let arr = [];
-      try{arr = raw ? JSON.parse(raw) : [];}catch{}
-      if(arr.length === 0){annList.textContent = 'No announcements yet.'; return;}
-      annList.innerHTML = '';
-      arr.forEach(a=>{
-        const div = document.createElement('div');
-        div.className = 'ann-item';
-        div.innerHTML = `<div>${a.text}</div><div class='small'>${a.time}</div>`;
-        annList.appendChild(div);
-      });
-    }
-
-    setInterval(pingStream, 15000);
-    pingStream();
-    loadAnnouncements();
-  </script>
 </body>
 </html>
