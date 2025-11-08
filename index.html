@@ -1,327 +1,115 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Niko the Fox - Fursona Profile</title>
-  <link rel="icon" href="https://raw.githubusercontent.com/NikonixDevelopment/nikonixdevelopment.github.io/refs/heads/main/nikothefox_files/favicon.png" type="image/png">
-
-  <!-- Open Graph / Facebook -->
-  <meta property="og:title" content="Niko the Fox - Fursona Profile">
-  <meta property="og:description" content="Niko the Fox: About Me :3">
-  <meta property="og:image" content="https://raw.githubusercontent.com/NikonixDevelopment/nikonixdevelopment.github.io/refs/heads/main/nikothefox_files/Niko%20the%20Fox%20Love.png">
-  <meta property="og:url" content="https://nikonixdevelopment.github.io/">
-  <meta property="og:type" content="website">
-
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Niko the Fox - Fursona Profile">
-  <meta name="twitter:description" content="Niko the Fox: About Me :3">
-  <meta name="twitter:image" content="https://raw.githubusercontent.com/NikonixDevelopment/nikonixdevelopment.github.io/refs/heads/main/nikothefox_files/Niko%20the%20Fox%20Love.png">
-
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Radio Stream — Listen Live</title>
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to bottom, #8a4e1b, #b5732c);
-      color: #ffffff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-    }
-
-    .title {
-      font-size: 2.5rem;
-      font-weight: bold;
-      margin-top: 2rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .tagline {
-      font-size: 1.2rem;
-      margin-bottom: 2rem;
-      opacity: 0.9;
-    }
-
-    .section {
-      background: linear-gradient(to bottom, #3c2c1b, #4e3922);
-      border-radius: 15px;
-      padding: 20px;
-      width: 90%;
-      max-width: 800px;
-      margin-bottom: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.4);
-    }
-
-    .section h2 {
-      margin-top: 0;
-      font-size: 1.5rem;
-      color: #ffd9a6;
-      margin-bottom: 10px;
-    }
-
-    .section p {
-      margin: 5px 0;
-      line-height: 1.4;
-    }
-
-    .profile-img {
-      width: 150px;
-      height: 150px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid #aa7b50;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-    }
-
-    .appearance-container {
-      display: table;
-      width: 100%;
-    }
-
-    .appearance-text, .appearance-image {
-      display: table-cell;
-      vertical-align: top;
-      padding: 0 15px;
-    }
-
-    .appearance-text {
-      width: 60%;
-    }
-
-    .appearance-image {
-      width: 40%;
-      text-align: right;
-    }
-
-    .traits, .activities {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .trait, .activity {
-      background-color: #5a4230;
-      padding: 5px 10px;
-      border-radius: 15px;
-      font-size: 0.9rem;
-    }
-
-    /* Gallery Styles */
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
-    }
-
-    .gallery img {
-      width: 100%;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-
-    .gallery img:hover {
-      transform: scale(1.05);
-    }
-
-    /* Lightbox Styles */
-    .lightbox {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.9);
-      justify-content: center;
-      align-items: center;
-      z-index: 999;
-      flex-direction: column;
-      overflow: auto;
-    }
-
-    .lightbox img {
-      max-width: 90%;
-      max-height: 80%;
-      border-radius: 10px;
-      margin-bottom: 10px;
-    }
-
-    .lightbox .caption {
-      color: #ffd9a6;
-      font-size: 1.2rem;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .lightbox .close-btn {
-      position: absolute;
-      top: 20px;
-      right: 30px;
-      font-size: 2rem;
-      color: #ffd9a6;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    .lightbox .prev-btn, .lightbox .next-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 3rem;
-      color: #ffd9a6;
-      cursor: pointer;
-      user-select: none;
-      font-weight: bold;
-      padding: 0 15px;
-    }
-
-    .lightbox .prev-btn { left: 20px; }
-    .lightbox .next-btn { right: 20px; }
-
-    @media (max-width: 600px) {
-      .appearance-container {
-        display: block;
-      }
-      .appearance-text, .appearance-image {
-        display: block;
-        width: 100%;
-        text-align: center;
-        padding: 10px 0;
-      }
-    }
+    :root{--bg:#0f1724;--card:#0b1220;--accent:#00c2ff;--muted:#94a3b8;--success:#10b981;--danger:#ef4444}
+    *{box-sizing:border-box}
+    body{font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial; margin:0; min-height:100vh; background:linear-gradient(180deg,#071028 0%, #071022 100%); color:#e6eef8; display:flex; align-items:center; justify-content:center; padding:20px}
+    .card{width:600px; max-width:95vw; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:12px; padding:20px; box-shadow:0 6px 30px rgba(2,6,23,0.6);}
+    h1{text-align:center; font-size:22px; margin-top:0}
+    .status{text-align:center; margin:10px 0}
+    .led{display:inline-block; width:12px; height:12px; border-radius:50%; background:#64748b; margin-right:8px}
+    .led.online{background:var(--success); box-shadow:0 0 8px rgba(16,185,129,0.35)}
+    .led.offline{background:var(--danger); box-shadow:0 0 8px rgba(239,68,68,0.25)}
+    .controls{text-align:center; margin:12px 0}
+    button{background:transparent; border:1px solid rgba(255,255,255,0.06); color:inherit; padding:8px 14px; border-radius:8px; cursor:pointer; margin:0 4px}
+    button.primary{background:linear-gradient(90deg,var(--accent),#7ce3ff); color:#012; border:none}
+    input[type=range]{width:120px;}
+    .ping{text-align:center; font-size:14px; color:var(--muted)}
+    .announcements{margin-top:20px}
+    .announcements h2{text-align:center; font-size:18px; margin-bottom:10px}
+    .ann-list{max-height:200px; overflow:auto;}
+    .ann-item{padding:8px; border-radius:8px; margin-bottom:8px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.04)}
+    .small{font-size:12px; color:var(--muted)}
   </style>
 </head>
 <body>
-  <div class="title">Niko the Fox</div>
-  <div class="tagline">Fursona Profile</div>
-
-  <div class="section">
-    <h2>Appearance</h2>
-    <div class="appearance-container">
-      <div class="appearance-text">
-        <p>🦊 Species: Red Fox (Vulpes vulpes)</p>
-        <p>🎂 Age: 2 years old (17 years old in Human Age)</p>
-        <p>💖 Personality: Sometimes I am shy, and sometimes I am quiet, but I can also be funny and friendly. I spend a lot of time in my den, but sometimes I come out to explore, and meet with friends.</p>
-        <p>✨ Appearance: I have the classic red fox look, nothing special</p>
-        <p>🏞️ Lifestyle: I am a wild fox, but will not resist a boop from a human, or anyone :3. Sometimes, I like to be alone, but I always know where to find and make new friends.</p>
-      </div>
-      <div class="appearance-image">
-        <img src="https://raw.githubusercontent.com/NikonixDevelopment/nikonixdevelopment.github.io/refs/heads/main/nikothefox_files/niko%20fox%20centred%20face.png" alt="Niko the Fox" class="profile-img" />
-      </div>
+  <div class="card">
+    <h1>🎵 Live Radio Stream</h1>
+    <div class="status">
+      <span id="led" class="led offline"></span>
+      <span id="status-text">Checking...</span>
     </div>
-  </div>
 
-  <div class="section">
-    <h2>Personality</h2>
-    <div class="traits">
-      <div class="trait">🦊 Shy</div>
-      <div class="trait">🤫 Quiet</div>
-      <div class="trait">😄 Funny</div>
-      <div class="trait">🤝 Friendly</div>
-      <div class="trait">🌲 Explorer</div>
+    <div class="controls">
+      <button id="playbtn" class="primary">Play</button>
+      <button id="pausebtn">Pause</button>
+      <label class="small">Vol <input id="vol" type="range" min="0" max="1" step="0.01" value="0.9"></label>
     </div>
-  </div>
 
-  <div class="section">
-    <h2>Favorite Activities</h2>
-    <div class="activities">
-      <div class="activity">📸 Photography</div>
-      <div class="activity">🎨 Art</div>
-      <div class="activity">🤝 Making friends</div>
+    <div class="ping">
+      Ping: <span id="ping-val">—</span> | Last check: <span id="last-check">—</span>
     </div>
-  </div>
 
-  <div class="section">
-    <h2>Backstory</h2>
-    <p>STILL WORKING ON IT... :3</p>
-  </div>
+    <audio id="player" crossorigin="anonymous"></audio>
 
-  <!-- Gallery Section -->
-  <div class="section">
-    <h2>Gallery</h2>
-    <div class="gallery">
-      <div class="gallery-item"><img src="https://raw.githubusercontent.com/NikonixDevelopment/nikonixdevelopment.github.io/refs/heads/main/nikothefox_files/niko%20fox.png" alt="Niko the Fox Portrait" data-caption="Niko the Fox Portrait"></div>
-      <div class="gallery-item"><img src="https://raw.githubusercontent.com/NikonixDevelopment/nikonixdevelopment.github.io/refs/heads/main/nikothefox_files/Niko%20the%20Fox%20Love.png" alt="Niko the Fox Love" data-caption="Niko the Fox Love"></div>
-      <div class="gallery-item"><img src="https://raw.githubusercontent.com/NikonixDevelopment/nikonixdevelopment.github.io/refs/heads/main/nikothefox_files/Hug%20(Niko%20%26%20Rovael).png" alt="Niko the Fox Hug (with Rovael)" data-caption="Niko the Fox Hug (with Rovael)"></div>
+    <div class="announcements">
+      <h2>📢 Announcements</h2>
+      <div class="ann-list" id="ann-list">No announcements yet.</div>
     </div>
-  </div>
-
-    <div class="section">
-    <h2>Discord</h2>
-    <p>Discord Server for Art and Emojis :3</p>
-
-    <iframe src="https://discord.com/widget?id=1180442560993431603&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
-  </div>
-
-  <!-- Lightbox -->
-  <div class="lightbox" id="lightbox">
-    <span class="close-btn" id="closeLightbox">&times;</span>
-    <span class="prev-btn" id="prevLightbox">&#10094;</span>
-    <img id="lightboxImg" src="" alt="">
-    <span class="next-btn" id="nextLightbox">&#10095;</span>
-    <div class="caption" id="lightboxCaption"></div>
   </div>
 
   <script>
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightboxImg');
-    const lightboxCaption = document.getElementById('lightboxCaption');
-    const closeBtn = document.getElementById('closeLightbox');
-    const prevBtn = document.getElementById('prevLightbox');
-    const nextBtn = document.getElementById('nextLightbox');
+    const STREAM_URL = 'https://stream.zeno.fm/uocc2xlzeqftv';
 
-    const galleryImages = Array.from(document.querySelectorAll('.gallery-item img'));
-    let currentIndex = 0;
+    const player = document.getElementById('player');
+    const playBtn = document.getElementById('playbtn');
+    const pauseBtn = document.getElementById('pausebtn');
+    const vol = document.getElementById('vol');
+    const led = document.getElementById('led');
+    const statusText = document.getElementById('status-text');
+    const pingVal = document.getElementById('ping-val');
+    const lastCheck = document.getElementById('last-check');
+    const annList = document.getElementById('ann-list');
 
-    function openLightbox(index) {
-      currentIndex = index;
-      const img = galleryImages[currentIndex];
-      lightbox.style.display = 'flex';
-      lightboxImg.src = img.src;
-      lightboxCaption.textContent = img.dataset.caption || img.alt;
+    player.src = STREAM_URL;
+    player.volume = vol.value;
+
+    function setStatus(online){
+      led.classList.toggle('online', online);
+      led.classList.toggle('offline', !online);
+      statusText.textContent = online ? 'Online' : 'Offline';
     }
 
-    function closeLightbox() {
-      lightbox.style.display = 'none';
-      lightboxImg.src = '';
-      lightboxCaption.textContent = '';
-    }
-
-    function showNext() {
-      currentIndex = (currentIndex + 1) % galleryImages.length;
-      openLightbox(currentIndex);
-    }
-
-    function showPrev() {
-      currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
-      openLightbox(currentIndex);
-    }
-
-    galleryImages.forEach((img, index) => {
-      img.addEventListener('click', () => openLightbox(index));
-    });
-
-    closeBtn.addEventListener('click', closeLightbox);
-    nextBtn.addEventListener('click', (e) => { e.stopPropagation(); showNext(); });
-    prevBtn.addEventListener('click', (e) => { e.stopPropagation(); showPrev(); });
-
-    // Close when clicking outside the image
-    lightbox.addEventListener('click', (e) => {
-      if (e.target === lightbox) closeLightbox();
-    });
-
-    // Keyboard navigation
-    document.addEventListener('keydown', (e) => {
-      if (lightbox.style.display === 'flex') {
-        if (e.key === 'ArrowRight') showNext();
-        if (e.key === 'ArrowLeft') showPrev();
-        if (e.key === 'Escape') closeLightbox();
+    async function pingStream(){
+      const start = performance.now();
+      try{
+        await fetch(STREAM_URL, {method: 'GET', mode: 'no-cors', cache: 'no-store'});
+        const ms = Math.round(performance.now() - start);
+        pingVal.textContent = ms + ' ms';
+        lastCheck.textContent = new Date().toLocaleTimeString();
+        setStatus(true);
+      }catch{
+        setStatus(false);
+        pingVal.textContent = 'error';
       }
-    });
+    }
+
+    playBtn.onclick = ()=>{player.play(); setStatus(true);};
+    pauseBtn.onclick = ()=>{player.pause();};
+    vol.oninput = ()=>{player.volume = vol.value;};
+
+    // load announcements from localStorage (if shared same origin)
+    function loadAnnouncements(){
+      const raw = localStorage.getItem('radio_announcements');
+      let arr = [];
+      try{arr = raw ? JSON.parse(raw) : [];}catch{}
+      if(arr.length === 0){annList.textContent = 'No announcements yet.'; return;}
+      annList.innerHTML = '';
+      arr.forEach(a=>{
+        const div = document.createElement('div');
+        div.className = 'ann-item';
+        div.innerHTML = `<div>${a.text}</div><div class='small'>${a.time}</div>`;
+        annList.appendChild(div);
+      });
+    }
+
+    setInterval(pingStream, 15000);
+    pingStream();
+    loadAnnouncements();
   </script>
 </body>
 </html>
