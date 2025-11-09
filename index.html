@@ -15,7 +15,7 @@
       font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     }
     *{box-sizing:border-box}
-    html,body{height:100%}
+    html,body{height:100%; margin:0; padding:0;}
     body{
       margin:0;
       background: linear-gradient(180deg,var(--bg1) 0%, var(--bg2) 60%);
@@ -55,6 +55,7 @@
       font-size:13px;
       color:var(--muted);
       transition: color 0.8s ease, background-color 0.8s ease;
+      flex-wrap: wrap;
     }
     .status-dot{ width:10px; height:10px; border-radius:50%; background:#e53e3e; transition: background 0.8s ease, transform 0.8s ease; }
     .dot-connecting {
@@ -66,16 +67,17 @@
       50% { transform: scale(1.6); opacity: 0.5; }
     }
 
-    .player{ margin-top:16px; display:flex; gap:16px; align-items:flex-start; }
+    .player{ margin-top:16px; display:flex; gap:16px; align-items:flex-start; flex-wrap:wrap; }
     .cover{ width:120px; height:120px; border-radius:12px;
       background: linear-gradient(135deg,#ff6bcb,#7c5cff);
       display:flex; align-items:center; justify-content:center;
       font-weight:800; font-size:28px; color:white; flex-shrink:0;
       box-shadow: 0 6px 24px rgba(124,92,255,0.18);
     }
-    .meta{ flex:1; min-width:0 }
-    .track-title{ font-weight:700; font-size:18px; margin:0 }
-    .track-sub{ color:var(--muted); font-size:13px; margin-top:6px }
+    .meta{ flex:1; min-width:0; }
+
+    .track-title{ font-weight:700; font-size:18px; margin:0; word-break: break-word; }
+    .track-sub{ color:var(--muted); font-size:13px; margin-top:6px; word-break: break-word; }
 
     .controls{
       margin-top:12px;
@@ -98,6 +100,7 @@
       align-items:center;
       box-shadow:0 6px 18px rgba(2,6,23,0.4);
       transition: background 0.3s ease;
+      font-size:14px;
     }
     .btn.secondary{
       background:transparent;
@@ -122,29 +125,41 @@
     }
     canvas{ width:100%; height:100%; display:block; }
 
-    .mini-row{ display:flex; gap:10px; margin-top:14px; }
-    .mini{ flex:1; padding:10px; border-radius:10px; background:rgba(255,255,255,0.03); color:var(--muted); font-size:13px; }
+    .mini-row{ display:flex; gap:10px; margin-top:14px; flex-wrap:wrap; }
+    .mini{ flex:1; min-width:140px; padding:10px; border-radius:10px; background:rgba(255,255,255,0.03); color:var(--muted); font-size:13px; }
 
     .aside h3{ margin:0; font-size:18px; font-weight:700 }
     .aside p{ color:var(--muted); font-size:13px; margin-top:8px }
 
     .footer{ margin-top:12px; font-size:12px; color:var(--muted) }
 
+    #connectText { transition: color 0.8s ease; }
+
     @media (max-width:960px){
-      .container{ grid-template-columns:1fr; padding:0 12px }
-      .cover{ width:96px; height:96px }
+      .container{ grid-template-columns:1fr; padding:0 12px; }
+      .cover{ width:96px; height:96px; font-size:24px; }
+      .btn{ font-size:13px; padding:8px 12px; }
+      input[type=range]{ width:100px; }
+      .visual{ height:90px; }
+      .track-title{ font-size:16px; }
+      .track-sub{ font-size:12px; }
+      .mini{ font-size:12px; padding:8px; }
     }
 
-    #connectText {
-      transition: color 0.8s ease;
+    @media (max-width:600px){
+      .player{ flex-direction: column; align-items:center; }
+      .meta{ width:100%; }
+      .controls{ justify-content:center; }
+      .cover{ width:80px; height:80px; font-size:20px; }
+      input[type=range]{ width:90px; }
+      .visual{ height:70px; }
     }
   </style>
 </head>
 <body>
-
   <div class="container">
     <div class="card">
-      <header style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px;">
+      <header style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap;">
         <div>
           <h1 class="title">NikoFM Radio</h1>
           <div class="subtitle">Non-Stop Hits | Zero Ads | Always Free</div>
@@ -161,7 +176,7 @@
       <section class="player">
         <div class="cover">NW</div>
         <div class="meta">
-          <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
             <div style="min-width:0;">
               <div class="track-title" id="trackTitle"></div>
               <div class="track-sub" id="trackSub"></div>
@@ -193,8 +208,7 @@
               <strong style="color:white; display:block">DJ:</strong> Niko
             </div>
             <div class="mini">
-              <strong style="color:white; display:block">Contributors</strong>
-              MzAquarius • Ewa
+              <strong style="color:white; display:block">Contributors</strong> MzAquarius • Ewa
             </div>
           </div>
         </div>
@@ -408,7 +422,6 @@
       audioCtx = null;
     }
 
-    // Ping stream immediately on page load
     connectText.textContent = 'Connecting...';
     connectText.style.color = '#fbbf24';
     statusText.textContent = 'CONNECTING...';
