@@ -3,67 +3,418 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>NikoFM — Non-Stop | Zero Ads | Always Free</title>
-  <meta name="description" content="Full-page embed of NikoFM Zeno.FM player" />
+  <title>NikoFM — Live Radio</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
   <style>
-    /* Make the iframe fill the entire viewport cleanly */
-    html, body {
-      height: 100%;
-      margin: 0;
-      background: #000; /* dark background during loading */
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      color: #fff;
+    :root{
+      --bg1: #0f1724;
+      --bg2: #0b1220;
+      --muted: #9aa4b2;
+      font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background: linear-gradient(180deg,var(--bg1) 0%, var(--bg2) 60%);
+      color: #e6eef8;
+      padding:28px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
     }
 
-    .player {
-      position: fixed;
-      inset: 0; /* top:0; right:0; bottom:0; left:0; */
-      display: flex;
-      align-items: stretch;
-      justify-content: stretch;
+    .container{
+      width:100%;
+      max-width:1100px;
+      display:grid;
+      grid-template-columns: 1fr 320px;
+      gap:22px;
     }
 
-    .player iframe {
-      width: 100%;
-      height: 95%;
-      border: 0;
-      display: block;
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:14px;
+      padding:18px;
+      box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+      border: 1px solid rgba(255,255,255,0.03);
     }
 
-    /* Small non-intrusive footer link for credits / fallback */
-    .credits {
-      position: absolute;
-      right: 12px;
-      bottom: 12px;
-      background: rgba(0,0,0,0.55);
-      padding: 6px 10px;
-      border-radius: 8px;
-      font-size: 13px;
-      line-height: 1;
-      text-decoration: none;
-      color: #fff;
-      backdrop-filter: blur(4px);
+    header .title{ font-size:22px; font-weight:800; margin:0; letter-spacing:-0.6px; }
+    header .subtitle{ color:var(--muted); font-size:13px; margin-top:6px }
+
+    .status-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+      font-size:13px;
+      color:var(--muted);
+      transition: color 0.8s ease, background-color 0.8s ease;
+    }
+    .status-dot{ width:10px; height:10px; border-radius:50%; background:#e53e3e; transition: background 0.8s ease, transform 0.8s ease; }
+    .dot-connecting {
+      background: #fbbf24;
+      animation: pulse 1s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.6); opacity: 0.5; }
     }
 
-    /* Improve keyboard accessibility focus outline */
-    a:focus { outline: 3px solid #7dd3fc; outline-offset: 3px; }
+    .player{ margin-top:16px; display:flex; gap:16px; align-items:flex-start; }
+    .cover{ width:120px; height:120px; border-radius:12px;
+      background: linear-gradient(135deg,#ff6bcb,#7c5cff);
+      display:flex; align-items:center; justify-content:center;
+      font-weight:800; font-size:28px; color:white; flex-shrink:0;
+      box-shadow: 0 6px 24px rgba(124,92,255,0.18);
+    }
+    .meta{ flex:1; min-width:0 }
+    .track-title{ font-weight:700; font-size:18px; margin:0 }
+    .track-sub{ color:var(--muted); font-size:13px; margin-top:6px }
 
-    /* Make sure the player is usable on very small screens */
-    @media (max-width: 420px) {
-      .credits { right: 8px; left: 8px; bottom: 10px; text-align: center; }
+    .controls{
+      margin-top:12px;
+      display:flex;
+      gap:8px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      padding:10px 14px;
+      border-radius:10px;
+      background:white;
+      color:#0b1220;
+      font-weight:700;
+      border:none;
+      cursor:pointer;
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      box-shadow:0 6px 18px rgba(2,6,23,0.4);
+      transition: background 0.3s ease;
+    }
+    .btn.secondary{
+      background:transparent;
+      color:var(--muted);
+      border:1px solid rgba(255,255,255,0.03);
+      box-shadow:none;
+      font-weight:600;
+    }
+
+    .volume{ display:flex; align-items:center; gap:8px; }
+    input[type=range]{ accent-color: #7c5cff; width:140px; }
+
+    .visual{
+      margin-top:12px;
+      background:linear-gradient(90deg, rgba(255,255,255,0.01), rgba(255,255,255,0.01));
+      border-radius:10px;
+      height:110px;
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      padding:8px;
+    }
+    canvas{ width:100%; height:100%; display:block; }
+
+    .mini-row{ display:flex; gap:10px; margin-top:14px; }
+    .mini{ flex:1; padding:10px; border-radius:10px; background:rgba(255,255,255,0.03); color:var(--muted); font-size:13px; }
+
+    .aside h3{ margin:0; font-size:18px; font-weight:700 }
+    .aside p{ color:var(--muted); font-size:13px; margin-top:8px }
+
+    .footer{ margin-top:12px; font-size:12px; color:var(--muted) }
+
+    @media (max-width:960px){
+      .container{ grid-template-columns:1fr; padding:0 12px }
+      .cover{ width:96px; height:96px }
+    }
+
+    #connectText {
+      transition: color 0.8s ease;
     }
   </style>
 </head>
 <body>
 
-  <main class="player" role="main">
-    <!-- Full-page Zeno.FM player -->
-    <iframe src="https://zeno.fm/player/nikofm-ko3z" title="NikoFM — Zeno.FM player" scrolling="no" allow="autoplay; encrypted-media; fullscreen"></iframe>
+  <div class="container">
+    <div class="card">
+      <header style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px;">
+        <div>
+          <h1 class="title">NikoFM Radio</h1>
+          <div class="subtitle">Non-Stop Hits | Zero Ads | Always Free</div>
+        </div>
+        <div style="text-align:right">
+          <div id="statusBadge" class="status-badge">
+            <span id="statusDot" class="status-dot"></span>
+            <span id="statusText">OFF AIR</span>
+          </div>
+          <div style="margin-top:8px; font-size:13px;" id="connectText">Connecting...</div>
+        </div>
+      </header>
 
-    <!-- Fallback / credit link -->
-    <a class="credits" href="https://zeno.fm/" target="_blank" rel="noopener noreferrer">A Zeno.FM Station</a>
-  </main>
+      <section class="player">
+        <div class="cover">NW</div>
+        <div class="meta">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+            <div style="min-width:0;">
+              <div class="track-title" id="trackTitle"></div>
+              <div class="track-sub" id="trackSub"></div>
+            </div>
+            <div style="text-align:right; color:var(--muted); font-size:13px">Stream: 128kbps</div>
+          </div>
 
+          <div class="controls">
+            <button id="playBtn" class="btn">Play</button>
+            <button id="muteBtn" class="btn secondary">Mute</button>
+            <div class="volume">
+              <input id="vol" type="range" min="0" max="1" step="0.01" value="0.9" />
+              <div id="volLabel" style="color:var(--muted); font-weight:600">90%</div>
+            </div>
+            <div id="buffering" style="color:var(--muted); font-size:13px; margin-left:auto">Idle</div>
+          </div>
+
+          <div class="visual" aria-hidden="true">
+            <canvas id="vis"></canvas>
+          </div>
+
+          <div class="mini-row">
+            <div class="mini">
+              <strong style="color:white; display:block">Schedule</strong>
+              15/11/2025 — Christmas songs will be starting on the 15th! <br><br>
+              08/11/2025 — NikoFM is back online!
+            </div>
+            <div class="mini">
+              <strong style="color:white; display:block">DJ:</strong> Niko
+            </div>
+            <div class="mini">
+              <strong style="color:white; display:block">Contributors</strong>
+              MzAquarius • Ewa
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="footer"><code style="color:var(--muted)">DISCORD: @polishniko</code></div>
+
+      <audio id="audio" preload="none" crossorigin="anonymous">
+        <source src="https://stream.zeno.fm/uocc2xlzeqftv" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+    </div>
+
+    <aside class="card aside">
+      <h3>About NikoFM</h3>
+      <p>Listen to NikoFM, a radio station free to play, ad-free & full of chill POP hits.</p>
+      <div style="margin-top:18px; color:var(--muted); font-size:12px">
+        Built with ♥ — open HTML, no backend required.<br><br>©2023-2025 NikoFM. Owned & Managed by Niko.
+      </div>
+    </aside>
+  </div>
+
+  <script>
+  (function(){
+    const STREAM_URL = 'https://stream.zeno.fm/uocc2xlzeqftv';
+    const STATUS_API = 'https://zeno.fm/api/station/uocc2xlzeqftv/status';
+    const audio = document.getElementById('audio');
+    const playBtn = document.getElementById('playBtn');
+    const muteBtn = document.getElementById('muteBtn');
+    const vol = document.getElementById('vol');
+    const volLabel = document.getElementById('volLabel');
+    const buffering = document.getElementById('buffering');
+    const statusDot = document.getElementById('statusDot');
+    const statusText = document.getElementById('statusText');
+    const connectText = document.getElementById('connectText');
+    const trackTitle = document.getElementById('trackTitle');
+    const trackSub = document.getElementById('trackSub');
+    const canvas = document.getElementById('vis');
+
+    let isPlaying = false;
+    let isMuted = false;
+    let pingInterval = null;
+
+    async function pingStream() {
+      const start = performance.now();
+      try {
+        await fetch(STREAM_URL, { method: 'HEAD', mode: 'no-cors', cache: 'no-store' });
+        const latency = performance.now() - start;
+        updateSignalQuality(latency);
+        setStatusLive();
+        fetchMetadata();
+      } catch (e) {
+        setStatusOffline();
+      }
+    }
+
+    function updateSignalQuality(latency) {
+      let text = '';
+      let color = '';
+      if (latency < 1000) {
+        text = `Connected: Very good signal (${Math.round(latency)} ms)`;
+        color = '#22c55e';
+      } else if (latency < 1500) {
+        text = `Connected: Good signal (${Math.round(latency)} ms)`;
+        color = '#facc15';
+      } else if (latency < 2000) {
+        text = `Connected: Acceptable signal (${Math.round(latency)} ms)`;
+        color = '#fb923c';
+      } else {
+        text = `Connected: Bad signal (${Math.round(latency)} ms)`;
+        color = '#ef4444';
+      }
+      connectText.textContent = text;
+      connectText.style.color = color;
+      statusDot.style.background = color;
+      statusDot.classList.remove('dot-connecting');
+    }
+
+    function setStatusLive(){
+      statusDot.classList.remove('dot-connecting');
+      statusText.textContent = 'LIVE';
+    }
+
+    function setStatusOffline(){
+      statusDot.classList.remove('dot-connecting');
+      statusDot.style.background = '#e53e3e';
+      statusText.textContent = 'OFF AIR';
+      connectText.textContent = 'Stream offline';
+      connectText.style.color = '#9aa4b2';
+    }
+
+    async function startPingLoop(){
+      await pingStream();
+      pingInterval = setInterval(pingStream, 10000);
+    }
+
+    function stopPingLoop(){
+      if(pingInterval) clearInterval(pingInterval);
+      pingInterval = null;
+    }
+
+    vol.addEventListener('input', () => {
+      audio.volume = vol.value;
+      volLabel.textContent = Math.round(vol.value * 100) + '%';
+      muteBtn.textContent = audio.volume === 0 ? 'Unmute' : 'Mute';
+    });
+
+    playBtn.addEventListener('click', async () => {
+      if (!isPlaying) {
+        connectText.textContent = 'Loading...';
+        connectText.style.color = '#fbbf24';
+        statusText.textContent = 'CONNECTING...';
+        statusDot.classList.add('dot-connecting');
+
+        try {
+          await audio.play();
+          isPlaying = true;
+          playBtn.textContent = 'Pause';
+          startVisualizer();
+          startPingLoop();
+        } catch (e) {
+          buffering.textContent = 'Play failed — check the stream';
+          setStatusOffline();
+        }
+      } else {
+        audio.pause();
+        isPlaying = false;
+        playBtn.textContent = 'Play';
+        stopVisualizer();
+        stopPingLoop();
+        setStatusOffline();
+      }
+    });
+
+    muteBtn.addEventListener('click', () => {
+      isMuted = !isMuted;
+      audio.muted = isMuted;
+      muteBtn.textContent = isMuted ? 'Unmute' : 'Mute';
+    });
+
+    audio.addEventListener('waiting', () => { buffering.textContent = 'Buffering…'; });
+    audio.addEventListener('playing', () => { buffering.textContent = 'Playing'; });
+    audio.addEventListener('error', () => { buffering.textContent = 'Stream error'; setStatusOffline(); });
+
+    async function fetchMetadata(){
+      try {
+        const resp = await fetch(STATUS_API, { cache:'no-store' });
+        if (!resp.ok) throw new Error();
+        const json = await resp.json();
+        if (json && json.now_playing){
+          trackTitle.textContent = json.now_playing.title || 'Live — Radio Stream';
+          trackSub.textContent = json.now_playing.artist || '';
+        }
+      } catch (e){
+        console.info('metadata fetch failed', e);
+      }
+    }
+
+    let audioCtx, analyser, sourceNode, dataArray, rafId;
+    function startVisualizer(){
+      try {
+        if (audioCtx) return;
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+        analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 256;
+        sourceNode = audioCtx.createMediaElementSource(audio);
+        sourceNode.connect(analyser);
+        analyser.connect(audioCtx.destination);
+        const bufferLength = analyser.frequencyBinCount;
+        dataArray = new Uint8Array(bufferLength);
+        const ctx = canvas.getContext('2d');
+        function resize(){
+          const dpr = window.devicePixelRatio || 1;
+          canvas.width = canvas.clientWidth * dpr;
+          canvas.height = canvas.clientHeight * dpr;
+          ctx.scale(dpr, dpr);
+        }
+        resize();
+        window.addEventListener('resize', resize);
+        function draw(){
+          rafId = requestAnimationFrame(draw);
+          analyser.getByteFrequencyData(dataArray);
+          const width = canvas.clientWidth;
+          const height = canvas.clientHeight;
+          ctx.clearRect(0,0,width,height);
+          const barCount = 48;
+          const step = Math.floor(dataArray.length / barCount);
+          const barWidth = Math.max(3, (width - (barCount-1)*4) / barCount);
+          let x = 0;
+          for (let i = 0; i < barCount; i++){
+            let sum = 0;
+            for (let j = 0; j < step; j++) sum += dataArray[i*step+j] || 0;
+            const avg = sum / step / 255;
+            const barHeight = Math.max(3, avg * (height - 12));
+            const hue = Math.floor(220 - (i/barCount)*200);
+            ctx.fillStyle = `hsl(${hue} 85% ${30 + avg*35}%)`;
+            ctx.fillRect(x, height - barHeight - 6, barWidth, barHeight);
+            x += barWidth + 4;
+          }
+        }
+        draw();
+      } catch (e) { console.warn('Visualizer failed', e); }
+    }
+
+    function stopVisualizer(){
+      if (rafId) cancelAnimationFrame(rafId);
+      if (audioCtx) audioCtx.close();
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0,0,canvas.clientWidth,canvas.clientHeight);
+      audioCtx = null;
+    }
+
+    // Ping stream immediately on page load
+    connectText.textContent = 'Connecting...';
+    connectText.style.color = '#fbbf24';
+    statusText.textContent = 'CONNECTING...';
+    statusDot.classList.add('dot-connecting');
+    pingStream();
+  })();
+  </script>
 </body>
 </html>
-
