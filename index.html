@@ -24,6 +24,19 @@
       display:flex;
       align-items:center;
       justify-content:center;
+      flex-direction: column;
+    }
+
+    .shutdown-banner {
+      width: 100%;
+      background: #dc2626;
+      color: white;
+      font-weight: 700;
+      text-align: center;
+      padding: 10px 0;
+      margin-bottom: 16px;
+      border-radius: 6px;
+      font-size: 14px;
     }
 
     .container{
@@ -32,6 +45,8 @@
       display:grid;
       grid-template-columns: 1fr 320px;
       gap:22px;
+      opacity: 0.6;
+      pointer-events: none; /* disable all interaction */
     }
 
     .card{
@@ -54,18 +69,9 @@
       background: linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
       font-size:13px;
       color:var(--muted);
-      transition: color 0.8s ease, background-color 0.8s ease;
       flex-wrap: wrap;
     }
-    .status-dot{ width:10px; height:10px; border-radius:50%; background:#e53e3e; transition: background 0.8s ease, transform 0.8s ease; }
-    .dot-connecting {
-      background: #fbbf24;
-      animation: pulse 1s ease-in-out infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.6); opacity: 0.5; }
-    }
+    .status-dot{ width:10px; height:10px; border-radius:50%; background:#e53e3e; }
 
     .player{ margin-top:16px; display:flex; gap:16px; align-items:flex-start; flex-wrap:wrap; }
     .cover{ width:120px; height:120px; border-radius:12px;
@@ -90,28 +96,27 @@
     .btn{
       padding:10px 14px;
       border-radius:10px;
-      background:white;
-      color:#0b1220;
+      background: #555555;
+      color: #aaa;
       font-weight:700;
       border:none;
-      cursor:pointer;
+      cursor:not-allowed;
       display:inline-flex;
       gap:8px;
       align-items:center;
-      box-shadow:0 6px 18px rgba(2,6,23,0.4);
-      transition: background 0.3s ease;
+      box-shadow:none;
       font-size:14px;
     }
     .btn.secondary{
       background:transparent;
-      color:var(--muted);
+      color: #777;
       border:1px solid rgba(255,255,255,0.03);
       box-shadow:none;
       font-weight:600;
     }
 
     .volume{ display:flex; align-items:center; gap:8px; }
-    input[type=range]{ accent-color: #7c5cff; width:140px; }
+    input[type=range]{ accent-color: #777; width:140px; pointer-events:none; }
 
     .visual{
       margin-top:12px;
@@ -157,6 +162,9 @@
   </style>
 </head>
 <body>
+  <div class="shutdown-banner">
+    ⚠️ This radio station has been discontinued on 09 December 2025
+  </div>
   <div class="container">
     <div class="card">
       <header style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap;">
@@ -169,7 +177,7 @@
             <span id="statusDot" class="status-dot"></span>
             <span id="statusText">OFF AIR</span>
           </div>
-          <div style="margin-top:8px; font-size:13px;" id="connectText">Connecting...</div>
+          <div style="margin-top:8px; font-size:13px;" id="connectText">Station discontinued</div>
         </div>
       </header>
 
@@ -178,20 +186,20 @@
         <div class="meta">
           <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
             <div style="min-width:0;">
-              <div class="track-title" id="trackTitle"></div>
-              <div class="track-sub" id="trackSub"></div>
+              <div class="track-title" id="trackTitle">No Live Stream</div>
+              <div class="track-sub" id="trackSub">Station discontinued</div>
             </div>
-            <div style="text-align:right; color:var(--muted); font-size:13px">Stream: 128kbps</div>
+            <div style="text-align:right; color:var(--muted); font-size:13px">Stream: 0kbps</div>
           </div>
 
           <div class="controls">
             <button id="playBtn" class="btn">Play</button>
             <button id="muteBtn" class="btn secondary">Mute</button>
             <div class="volume">
-              <input id="vol" type="range" min="0" max="1" step="0.01" value="0.9" />
-              <div id="volLabel" style="color:var(--muted); font-weight:600">90%</div>
+              <input id="vol" type="range" min="0" max="1" step="0.01" value="0" />
+              <div id="volLabel" style="color:var(--muted); font-weight:600">0%</div>
             </div>
-            <div id="buffering" style="color:var(--muted); font-size:13px; margin-left:auto">Idle</div>
+            <div id="buffering" style="color:var(--muted); font-size:13px; margin-left:auto">Offline</div>
           </div>
 
           <div class="visual" aria-hidden="true">
@@ -201,8 +209,8 @@
           <div class="mini-row">
             <div class="mini">
               <strong style="color:white; display:block">Schedule</strong>
-              15/11/2025 — Christmas songs will be starting on the 15th! <br><br>
-              08/11/2025 — NikoFM is back online!
+              09/12/2025 — Station discontinued <br><br>
+              15/11/2025 — Christmas songs were scheduled!
             </div>
             <div class="mini">
               <strong style="color:white; display:block">DJ:</strong> Niko
@@ -217,7 +225,7 @@
       <div class="footer"><code style="color:var(--muted)">DISCORD: @polishniko</code></div>
 
       <audio id="audio" preload="none" crossorigin="anonymous">
-        <source src="https://stream.zeno.fm/uocc2xlzeqftv" type="audio/mpeg">
+        <source src="" type="audio/mpeg">
         Your browser does not support the audio element.
       </audio>
     </div>
@@ -232,202 +240,14 @@
   </div>
 
   <script>
-  (function(){
-    const STREAM_URL = 'https://stream.zeno.fm/uocc2xlzeqftv';
-    const STATUS_API = 'https://zeno.fm/api/station/uocc2xlzeqftv/status';
-    const audio = document.getElementById('audio');
-    const playBtn = document.getElementById('playBtn');
-    const muteBtn = document.getElementById('muteBtn');
-    const vol = document.getElementById('vol');
-    const volLabel = document.getElementById('volLabel');
-    const buffering = document.getElementById('buffering');
-    const statusDot = document.getElementById('statusDot');
-    const statusText = document.getElementById('statusText');
-    const connectText = document.getElementById('connectText');
-    const trackTitle = document.getElementById('trackTitle');
-    const trackSub = document.getElementById('trackSub');
-    const canvas = document.getElementById('vis');
-
-    let isPlaying = false;
-    let isMuted = false;
-    let pingInterval = null;
-
-    async function pingStream() {
-      const start = performance.now();
-      try {
-        await fetch(STREAM_URL, { method: 'HEAD', mode: 'no-cors', cache: 'no-store' });
-        const latency = performance.now() - start;
-        updateSignalQuality(latency);
-        setStatusLive();
-        fetchMetadata();
-      } catch (e) {
-        setStatusOffline();
-      }
-    }
-
-    function updateSignalQuality(latency) {
-      let text = '';
-      let color = '';
-      if (latency < 1000) {
-        text = `Connected: Very good signal (${Math.round(latency)} ms)`;
-        color = '#22c55e';
-      } else if (latency < 1500) {
-        text = `Connected: Good signal (${Math.round(latency)} ms)`;
-        color = '#facc15';
-      } else if (latency < 2000) {
-        text = `Connected: Acceptable signal (${Math.round(latency)} ms)`;
-        color = '#fb923c';
-      } else {
-        text = `Connected: Bad signal (${Math.round(latency)} ms)`;
-        color = '#ef4444';
-      }
-      connectText.textContent = text;
-      connectText.style.color = color;
-      statusDot.style.background = color;
-      statusDot.classList.remove('dot-connecting');
-    }
-
-    function setStatusLive(){
-      statusDot.classList.remove('dot-connecting');
-      statusText.textContent = 'LIVE';
-    }
-
-    function setStatusOffline(){
-      statusDot.classList.remove('dot-connecting');
-      statusDot.style.background = '#e53e3e';
-      statusText.textContent = 'OFF AIR';
-      connectText.textContent = 'Stream offline';
-      connectText.style.color = '#9aa4b2';
-    }
-
-    async function startPingLoop(){
-      await pingStream();
-      pingInterval = setInterval(pingStream, 10000);
-    }
-
-    function stopPingLoop(){
-      if(pingInterval) clearInterval(pingInterval);
-      pingInterval = null;
-    }
-
-    vol.addEventListener('input', () => {
-      audio.volume = vol.value;
-      volLabel.textContent = Math.round(vol.value * 100) + '%';
-      muteBtn.textContent = audio.volume === 0 ? 'Unmute' : 'Mute';
-    });
-
-    playBtn.addEventListener('click', async () => {
-      if (!isPlaying) {
-        connectText.textContent = 'Loading...';
-        connectText.style.color = '#fbbf24';
-        statusText.textContent = 'CONNECTING...';
-        statusDot.classList.add('dot-connecting');
-
-        try {
-          await audio.play();
-          isPlaying = true;
-          playBtn.textContent = 'Pause';
-          startVisualizer();
-          startPingLoop();
-        } catch (e) {
-          buffering.textContent = 'Play failed — check the stream';
-          setStatusOffline();
-        }
-      } else {
-        audio.pause();
-        isPlaying = false;
-        playBtn.textContent = 'Play';
-        stopVisualizer();
-        stopPingLoop();
-        setStatusOffline();
-      }
-    });
-
-    muteBtn.addEventListener('click', () => {
-      isMuted = !isMuted;
-      audio.muted = isMuted;
-      muteBtn.textContent = isMuted ? 'Unmute' : 'Mute';
-    });
-
-    audio.addEventListener('waiting', () => { buffering.textContent = 'Buffering…'; });
-    audio.addEventListener('playing', () => { buffering.textContent = 'Playing'; });
-    audio.addEventListener('error', () => { buffering.textContent = 'Stream error'; setStatusOffline(); });
-
-    async function fetchMetadata(){
-      try {
-        const resp = await fetch(STATUS_API, { cache:'no-store' });
-        if (!resp.ok) throw new Error();
-        const json = await resp.json();
-        if (json && json.now_playing){
-          trackTitle.textContent = json.now_playing.title || 'Live — Radio Stream';
-          trackSub.textContent = json.now_playing.artist || '';
-        }
-      } catch (e){
-        console.info('metadata fetch failed', e);
-      }
-    }
-
-    let audioCtx, analyser, sourceNode, dataArray, rafId;
-    function startVisualizer(){
-      try {
-        if (audioCtx) return;
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        audioCtx = new AudioContext();
-        analyser = audioCtx.createAnalyser();
-        analyser.fftSize = 256;
-        sourceNode = audioCtx.createMediaElementSource(audio);
-        sourceNode.connect(analyser);
-        analyser.connect(audioCtx.destination);
-        const bufferLength = analyser.frequencyBinCount;
-        dataArray = new Uint8Array(bufferLength);
-        const ctx = canvas.getContext('2d');
-        function resize(){
-          const dpr = window.devicePixelRatio || 1;
-          canvas.width = canvas.clientWidth * dpr;
-          canvas.height = canvas.clientHeight * dpr;
-          ctx.scale(dpr, dpr);
-        }
-        resize();
-        window.addEventListener('resize', resize);
-        function draw(){
-          rafId = requestAnimationFrame(draw);
-          analyser.getByteFrequencyData(dataArray);
-          const width = canvas.clientWidth;
-          const height = canvas.clientHeight;
-          ctx.clearRect(0,0,width,height);
-          const barCount = 48;
-          const step = Math.floor(dataArray.length / barCount);
-          const barWidth = Math.max(3, (width - (barCount-1)*4) / barCount);
-          let x = 0;
-          for (let i = 0; i < barCount; i++){
-            let sum = 0;
-            for (let j = 0; j < step; j++) sum += dataArray[i*step+j] || 0;
-            const avg = sum / step / 255;
-            const barHeight = Math.max(3, avg * (height - 12));
-            const hue = Math.floor(220 - (i/barCount)*200);
-            ctx.fillStyle = `hsl(${hue} 85% ${30 + avg*35}%)`;
-            ctx.fillRect(x, height - barHeight - 6, barWidth, barHeight);
-            x += barWidth + 4;
-          }
-        }
-        draw();
-      } catch (e) { console.warn('Visualizer failed', e); }
-    }
-
-    function stopVisualizer(){
-      if (rafId) cancelAnimationFrame(rafId);
-      if (audioCtx) audioCtx.close();
-      const ctx = canvas.getContext('2d');
-      ctx.clearRect(0,0,canvas.clientWidth,canvas.clientHeight);
-      audioCtx = null;
-    }
-
-    connectText.textContent = 'Connecting...';
-    connectText.style.color = '#fbbf24';
-    statusText.textContent = 'CONNECTING...';
-    statusDot.classList.add('dot-connecting');
-    pingStream();
-  })();
+    // Disable all audio interaction and show discontinued messages
+    document.getElementById('statusDot').style.background = '#e53e3e';
+    document.getElementById('statusText').textContent = 'OFF AIR';
+    document.getElementById('connectText').textContent = 'Station discontinued';
+    document.getElementById('trackTitle').textContent = 'No Live Stream';
+    document.getElementById('trackSub').textContent = 'Station discontinued';
+    document.getElementById('vol').value = 0;
+    document.getElementById('volLabel').textContent = '0%';
   </script>
 </body>
 </html>
