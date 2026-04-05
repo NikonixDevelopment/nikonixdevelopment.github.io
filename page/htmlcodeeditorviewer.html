@@ -1,154 +1,253 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-     <link rel="icon" href="https://raw.githubusercontent.com/NikonixDevelopment/nikonixdevelopment.github.io/refs/heads/main/assets/channels4_profile.jpg" type="image/png">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live HTML Editor</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NikoFM — Live Radio</title>
 
-      <!-- Meta Tags -->
-  <meta property="og:title" content="HTML Editor + LIVE viewer">
-  <meta property="og:description" content="Edit and view html realtime">
-  <meta property="og:image" content="https://raw.githubusercontent.com/NikonixDevelopment/nikonixdevelopment.github.io/refs/heads/main/assets/channels4_profile.jpg">
-  <meta property="og:url" content="https://nikonixdevelopment.github.io/page/htmlcodeeditorviewer.html">
-    <style>
-        body {
-            display: flex;
-            height: 100vh;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            flex-direction: column;
-        }
-        .buttons {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            display: flex;
-            gap: 10px;
-        }
-        button {
-            padding: 10px;
-            background-color: #5c5c5c;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #444;
-        }
-        .editor-container {
-            display: flex;
-            margin-top: 50px; /* Adjusted space to avoid overlap with buttons */
-            height: 100%;
-        }
-        textarea {
-            width: 50%;
-            height: 100%;
-            border: none;
-            padding: 15px;
-            font-size: 16px;
-            resize: none;
-            outline: none;
-            background: #2b2b2b;
-            color: #f8f8f2;
-            font-family: monospace;
-            border-right: 2px solid #444;
-        }
-        iframe {
-            width: 50%;
-            height: 100%;
-            border: none;
-            background: white;
-            box-shadow: -3px 0 5px rgba(0, 0, 0, 0.2);
-        }
-    </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg1: #0f1724;
+      --bg2: #0b1220;
+      --muted: #9aa4b2;
+      font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%; margin:0; padding:0;}
+    body{
+      margin:0;
+      background: linear-gradient(180deg,var(--bg1) 0%, var(--bg2) 60%);
+      color: #e6eef8;
+      padding:28px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction: column;
+    }
+
+    .shutdown-banner {
+      width: 100%;
+      background: #dc2626;
+      color: white;
+      font-weight: 700;
+      text-align: center;
+      padding: 10px 0;
+      margin-bottom: 16px;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .container{
+      width:100%;
+      max-width:1100px;
+      display:grid;
+      grid-template-columns: 1fr 320px;
+      gap:22px;
+      opacity: 0.6;
+      pointer-events: none; /* disable all interaction */
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:14px;
+      padding:18px;
+      box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+      border: 1px solid rgba(255,255,255,0.03);
+    }
+
+    header .title{ font-size:22px; font-weight:800; margin:0; letter-spacing:-0.6px; }
+    header .subtitle{ color:var(--muted); font-size:13px; margin-top:6px }
+
+    .status-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+      font-size:13px;
+      color:var(--muted);
+      flex-wrap: wrap;
+    }
+    .status-dot{ width:10px; height:10px; border-radius:50%; background:#e53e3e; }
+
+    .player{ margin-top:16px; display:flex; gap:16px; align-items:flex-start; flex-wrap:wrap; }
+    .cover{ width:120px; height:120px; border-radius:12px;
+      background: linear-gradient(135deg,#ff6bcb,#7c5cff);
+      display:flex; align-items:center; justify-content:center;
+      font-weight:800; font-size:28px; color:white; flex-shrink:0;
+      box-shadow: 0 6px 24px rgba(124,92,255,0.18);
+    }
+    .meta{ flex:1; min-width:0; }
+
+    .track-title{ font-weight:700; font-size:18px; margin:0; word-break: break-word; }
+    .track-sub{ color:var(--muted); font-size:13px; margin-top:6px; word-break: break-word; }
+
+    .controls{
+      margin-top:12px;
+      display:flex;
+      gap:8px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      padding:10px 14px;
+      border-radius:10px;
+      background: #555555;
+      color: #aaa;
+      font-weight:700;
+      border:none;
+      cursor:not-allowed;
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      box-shadow:none;
+      font-size:14px;
+    }
+    .btn.secondary{
+      background:transparent;
+      color: #777;
+      border:1px solid rgba(255,255,255,0.03);
+      box-shadow:none;
+      font-weight:600;
+    }
+
+    .volume{ display:flex; align-items:center; gap:8px; }
+    input[type=range]{ accent-color: #777; width:140px; pointer-events:none; }
+
+    .visual{
+      margin-top:12px;
+      background:linear-gradient(90deg, rgba(255,255,255,0.01), rgba(255,255,255,0.01));
+      border-radius:10px;
+      height:110px;
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      padding:8px;
+    }
+    canvas{ width:100%; height:100%; display:block; }
+
+    .mini-row{ display:flex; gap:10px; margin-top:14px; flex-wrap:wrap; }
+    .mini{ flex:1; min-width:140px; padding:10px; border-radius:10px; background:rgba(255,255,255,0.03); color:var(--muted); font-size:13px; }
+
+    .aside h3{ margin:0; font-size:18px; font-weight:700 }
+    .aside p{ color:var(--muted); font-size:13px; margin-top:8px }
+
+    .footer{ margin-top:12px; font-size:12px; color:var(--muted) }
+
+    #connectText { transition: color 0.8s ease; }
+
+    @media (max-width:960px){
+      .container{ grid-template-columns:1fr; padding:0 12px; }
+      .cover{ width:96px; height:96px; font-size:24px; }
+      .btn{ font-size:13px; padding:8px 12px; }
+      input[type=range]{ width:100px; }
+      .visual{ height:90px; }
+      .track-title{ font-size:16px; }
+      .track-sub{ font-size:12px; }
+      .mini{ font-size:12px; padding:8px; }
+    }
+
+    @media (max-width:600px){
+      .player{ flex-direction: column; align-items:center; }
+      .meta{ width:100%; }
+      .controls{ justify-content:center; }
+      .cover{ width:80px; height:80px; font-size:20px; }
+      input[type=range]{ width:90px; }
+      .visual{ height:70px; }
+    }
+  </style>
 </head>
 <body>
-    <div class="buttons">
-        <button onclick="exportCode()">Export</button>
-        <button onclick="importCode()">Import</button>
-        <button onclick="clearCode()">Clear</button>
+  <div class="shutdown-banner">
+    ⚠️ This radio station has been discontinued on 09 December 2025
+  </div>
+  <div class="container">
+    <div class="card">
+      <header style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap;">
+        <div>
+          <h1 class="title">NikoFM Radio</h1>
+          <div class="subtitle">Non-Stop Hits | Zero Ads | Always Free</div>
+        </div>
+        <div style="text-align:right">
+          <div id="statusBadge" class="status-badge">
+            <span id="statusDot" class="status-dot"></span>
+            <span id="statusText">OFF AIR</span>
+          </div>
+          <div style="margin-top:8px; font-size:13px;" id="connectText">Station discontinued</div>
+        </div>
+      </header>
+
+      <section class="player">
+        <div class="cover">NW</div>
+        <div class="meta">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+            <div style="min-width:0;">
+              <div class="track-title" id="trackTitle">No Live Stream</div>
+              <div class="track-sub" id="trackSub">Station discontinued</div>
+            </div>
+            <div style="text-align:right; color:var(--muted); font-size:13px">Stream: 0kbps</div>
+          </div>
+
+          <div class="controls">
+            <button id="playBtn" class="btn">Play</button>
+            <button id="muteBtn" class="btn secondary">Mute</button>
+            <div class="volume">
+              <input id="vol" type="range" min="0" max="1" step="0.01" value="0" />
+              <div id="volLabel" style="color:var(--muted); font-weight:600">0%</div>
+            </div>
+            <div id="buffering" style="color:var(--muted); font-size:13px; margin-left:auto">Offline</div>
+          </div>
+
+          <div class="visual" aria-hidden="true">
+            <canvas id="vis"></canvas>
+          </div>
+
+          <div class="mini-row">
+            <div class="mini">
+              <strong style="color:white; display:block">Schedule</strong>
+              09/12/2025 — Station discontinued <br><br>
+              15/11/2025 — Christmas songs were scheduled!
+            </div>
+            <div class="mini">
+              <strong style="color:white; display:block">DJ:</strong> Niko
+            </div>
+            <div class="mini">
+              <strong style="color:white; display:block">Contributors</strong> MzAquarius • Ewa
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="footer"><code style="color:var(--muted)">DISCORD: @polishniko</code></div>
+
+      <audio id="audio" preload="none" crossorigin="anonymous">
+        <source src="" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
     </div>
-    <div class="editor-container">
-        <textarea id="htmlInput" placeholder="Type HTML here..."><h1>HTML</h1></textarea>
-        <iframe id="output"></iframe>
-    </div>
 
-    <script>
-        const input = document.getElementById('htmlInput');
-        const output = document.getElementById('output').contentDocument;
+    <aside class="card aside">
+      <h3>About NikoFM</h3>
+      <p>Listen to NikoFM, a radio station free to play, ad-free & full of chill POP hits.</p>
+      <div style="margin-top:18px; color:var(--muted); font-size:12px">
+        Built with ♥ — open HTML, no backend required.<br><br>©2023-2025 NikoFM. Owned & Managed by Niko.
+      </div>
+    </aside>
+  </div>
 
-        function updateOutput() {
-            output.open();
-            output.write(input.value);
-            output.close();
-        }
-
-        input.addEventListener('input', updateOutput);
-
-        input.addEventListener('keydown', function(event) {
-            if (event.key === '>') {
-                const start = input.selectionStart;
-                const value = input.value;
-                
-                const tagMatch = value.substring(0, start).match(/<([a-zA-Z0-9]+)$/);
-                if (tagMatch) {
-                    const tagName = tagMatch[1];
-                    const endTag = `</${tagName}>`;
-                    
-                    input.value = value.substring(0, start) + '>' + endTag + value.substring(start);
-                    input.selectionStart = input.selectionEnd = start + 1;
-                    event.preventDefault();
-                }
-            }
-        });
-
-        updateOutput(); // Initialize with default text
-
-        function exportCode() {
-            const blob = new Blob([input.value], { type: 'text/html' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = 'code.html';
-            link.click();
-        }
-
-        function importCode() {
-            const fileInput = document.createElement('input');
-            fileInput.type = 'file';
-            fileInput.accept = '.html';
-            fileInput.onchange = function(event) {
-                const file = event.target.files[0];
-                const reader = new FileReader();
-                
-                reader.onload = function(fileEvent) {
-                    const code = fileEvent.target.result;
-                    if (input.value.trim() !== "") {
-                        const confirmImport = confirm("Are you sure you want to remove all the current code and import another file?");
-                        if (confirmImport) {
-                            input.value = code;
-                            updateOutput();
-                        }
-                    } else {
-                        input.value = code;
-                        updateOutput();
-                    }
-                };
-
-                reader.readAsText(file);
-            };
-
-            fileInput.click();
-        }
-
-        function clearCode() {
-            const confirmClear = confirm("DO YOU REALLY WANT TO CLEAR CODE? THIS CANNOT BE UNDONE");
-            if (confirmClear) {
-                input.value = "";
-                updateOutput();
-            }
-        }
-    </script>
+  <script>
+    // Disable all audio interaction and show discontinued messages
+    document.getElementById('statusDot').style.background = '#e53e3e';
+    document.getElementById('statusText').textContent = 'OFF AIR';
+    document.getElementById('connectText').textContent = 'Station discontinued';
+    document.getElementById('trackTitle').textContent = 'No Live Stream';
+    document.getElementById('trackSub').textContent = 'Station discontinued';
+    document.getElementById('vol').value = 0;
+    document.getElementById('volLabel').textContent = '0%';
+  </script>
 </body>
 </html>
